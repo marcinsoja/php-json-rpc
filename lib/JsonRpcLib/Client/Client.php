@@ -2,6 +2,6 @@
 
 namespace JsonRpcLib\Client;
 
-class Client {
-    
+class Client
+{
 }

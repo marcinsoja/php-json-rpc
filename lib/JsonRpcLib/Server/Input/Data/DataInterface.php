@@ -1,9 +1,9 @@
-<?php 
+<?php
 
 namespace JsonRpcLib\Server\Input\Data;
 
-interface DataInterface {
-    
+interface DataInterface
+{
     /**
      * @return string
      */

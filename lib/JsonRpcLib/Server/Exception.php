@@ -2,6 +2,6 @@
 
 namespace JsonRpcLib\Server;
 
-class Exception extends \JsonRpcLib\Exception {
-    
+class Exception extends \JsonRpcLib\Exception
+{
 }
