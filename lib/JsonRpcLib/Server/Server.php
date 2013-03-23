@@ -6,6 +6,50 @@ class Server
 {
     /**
      *
+     * @var Service\Manager\ManagerInterface
+     */
+    private $serviceManager = null;
+
+    /**
+     *
+     * @param Service\Manager\ManagerInterface $manager
+     */
+    public function __construct(Service\Manager\ManagerInterface $manager)
+    {
+        $this->serviceManager = $manager;
+    }
+
+    /**
+     *
+     * @param  \JsonRpcLib\Server\Service\Provider\ProviderInterface|object $service
+     * @param  string|null                                                  $name
+     * @return Server
+     */
+    public function addService($service, $name = null)
+    {
+        if (null === $name) {
+            $name = __CLASS__;
+        }
+
+        if ($service instanceof Service\Provider\ProviderInterface) {
+
+        } elseif ($service instanceof \Closure) {
+            $service = new Service\Provider\ClosureProvider($service);
+        } elseif (is_object($service)) {
+            $service = new Service\Provider\ObjectProvider($service);
+        }
+
+        if (false == $service instanceof Service\Provider\ProviderInterface) {
+            throw new \InvalidArgumentException();
+        }
+
+        $this->serviceManager->addService($name, $service);
+
+        return $this;
+    }
+
+    /**
+     *
      * @param \JsonRpcLib\Server\Input\Message  $input
      * @param \JsonRpcLib\Server\Output\Message $output
      */
@@ -51,9 +95,59 @@ class Server
     {
         $request->valid();
 
+        $serviceName = __CLASS__;
+        $method = $request->method;
+
+        // dot style => serviceName.method
+        $methodNameParts = explode('.', $request->method, 2);
+        if (count($methodNameParts) == 2) {
+            $serviceName = $methodNameParts[0];
+            $method = $methodNameParts[1];
+        }
+
+        $params = $request->params;
+
+        if (null === $params) {
+            $params = array();
+        }
+
+        // @todo named params
+        if (is_object($params)) {
+            $params = (array) $params;
+        }
+
+        if (false == is_array($params)) {
+            $params = array($params);
+        }
+
+        $service = null;
+
         try {
-            $result = 'result';
+
+            if (__CLASS__ == $serviceName) {
+                $service = $this->serviceManager->getService($method);
+                if (false == ($service instanceof Service\Provider\ClosureProvider)) {
+                    $service = null;
+                }
+            }
+
+            if (null == $service) {
+                $service = $this->serviceManager->getService($serviceName);
+            }
+
+            if (null == $service) {
+                throw new \JsonRpcLib\Server\Exception(
+                    \JsonRpcLib\Server\Output\Error::METHOD_NOT_FOUND(),
+                    \JsonRpcLib\Server\Output\Error::METHOD_NOT_FOUND
+                );
+            }
+
+            $result = $service->execute($method, $params);
+
         } catch (\Exception $e) {
+            if ($e instanceof Exception) {
+                throw $e;
+            }
             throw new \JsonRpcLib\Server\Exception(
                 Output\Error::SERVER_ERROR(),
                 Output\Error::SERVER_ERROR,
