@@ -27,10 +27,6 @@ class Server
      */
     public function addService($service, $name = null)
     {
-        if (null === $name) {
-            $name = __CLASS__;
-        }
-
         if ($service instanceof Service\Provider\ProviderInterface) {
 
         } elseif ($service instanceof \Closure) {
@@ -43,7 +39,7 @@ class Server
             throw new \InvalidArgumentException();
         }
 
-        $this->serviceManager->addService($name, $service);
+        $this->serviceManager->addService($service, $name);
 
         return $this;
     }
@@ -95,45 +91,9 @@ class Server
     {
         $request->valid();
 
-        $serviceName = __CLASS__;
-        $method = $request->method;
-
-        // dot style => serviceName.method
-        $methodNameParts = explode('.', $request->method, 2);
-        if (count($methodNameParts) == 2) {
-            $serviceName = $methodNameParts[0];
-            $method = $methodNameParts[1];
-        }
-
-        $params = $request->params;
-
-        if (null === $params) {
-            $params = array();
-        }
-
-        // @todo named params
-        if (is_object($params)) {
-            $params = (array) $params;
-        }
-
-        if (false == is_array($params)) {
-            $params = array($params);
-        }
-
-        $service = null;
-
         try {
 
-            if (__CLASS__ == $serviceName) {
-                $service = $this->serviceManager->getService($method);
-                if (false == ($service instanceof Service\Provider\ClosureProvider)) {
-                    $service = null;
-                }
-            }
-
-            if (null == $service) {
-                $service = $this->serviceManager->getService($serviceName);
-            }
+            $service = $this->serviceManager->getService($request->method);
 
             if (null == $service) {
                 throw new \JsonRpcLib\Server\Exception(
@@ -142,7 +102,11 @@ class Server
                 );
             }
 
-            $result = $service->execute($method, $params);
+            $result = $this->serviceManager->execute(
+                $service,
+                $request->method,
+                $request->getParams()
+            );
 
         } catch (\Exception $e) {
             if ($e instanceof Exception) {

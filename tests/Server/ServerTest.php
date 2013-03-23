@@ -95,6 +95,7 @@ class ServerTest extends PHPUnit_Framework_TestCase
         
         $server->addService($this->closureSum);
         $server->addService($this->serviceObject);
+        $server->addService($this->serviceObject, 'solo');
         
         $server->dispatch($inputMessage, $outputMessage);
         
@@ -111,6 +112,9 @@ class ServerTest extends PHPUnit_Framework_TestCase
                   '{"jsonrpc":"2.0","error":{"code":-32600,"message":"Invalid Request"},"id":null}'),
             
             array('{"jsonrpc":"2.0","method":"serviceObject.fake","params":"bar"}',
+                  '{"jsonrpc":"2.0","error":{"code":-32601,"message":"Method not found"},"id":null}'),
+            
+            array('{"jsonrpc":"2.0","method":"solo","params":"bar"}',
                   '{"jsonrpc":"2.0","error":{"code":-32601,"message":"Method not found"},"id":null}'),
             
             array('{"jsonrpc":"2.0","method":"error"}',

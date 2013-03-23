@@ -89,4 +89,26 @@ class Request
     {
         return (null === $this->id);
     }
+
+    /**
+     * @return array
+     */
+    public function getParams()
+    {
+        $params = $this->params;
+
+        if (null === $params) {
+            $params = array();
+        }
+
+        if (is_object($params)) {
+            $params = (array) $params;
+        }
+
+        if (false == is_array($params)) {
+            $params = array($params);
+        }
+
+        return $params;
+    }
 }
