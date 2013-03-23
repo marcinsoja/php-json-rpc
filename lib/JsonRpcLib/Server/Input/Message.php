@@ -48,10 +48,17 @@ class Message implements \IteratorAggregate, \Countable
     {
         $data = json_decode($content);
 
+        if (null === $data) {
+            throw new \JsonRpcLib\Server\Exception(
+                \JsonRpcLib\Server\Output\Error::PARSE_ERROR(),
+                \JsonRpcLib\Server\Output\Error::PARSE_ERROR
+            );
+        }
+
         if (empty($data)) {
             throw new \JsonRpcLib\Server\Exception(
-                \JsonRpcLib\Error\Code::PARSE_ERROR(),
-                \JsonRpcLib\Error\Code::PARSE_ERROR
+                \JsonRpcLib\Server\Output\Error::INVALID_REQUEST(),
+                \JsonRpcLib\Server\Output\Error::INVALID_REQUEST
             );
         }
 

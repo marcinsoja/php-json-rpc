@@ -61,15 +61,22 @@ class Request
     {
         if ('2.0' != $this->jsonrpc) {
             throw new \JsonRpcLib\Server\Exception(
-                \JsonRpcLib\Error\Code::INVALID_REQUEST(),
-                \JsonRpcLib\Error\Code::INVALID_REQUEST
+                \JsonRpcLib\Server\Output\Error::INVALID_REQUEST(),
+                \JsonRpcLib\Server\Output\Error::INVALID_REQUEST
             );
         }
 
         if (empty($this->method)) {
             throw new \JsonRpcLib\Server\Exception(
-                \JsonRpcLib\Error\Code::INVALID_REQUEST(),
-                \JsonRpcLib\Error\Code::INVALID_REQUEST
+                \JsonRpcLib\Server\Output\Error::INVALID_REQUEST(),
+                \JsonRpcLib\Server\Output\Error::INVALID_REQUEST
+            );
+        }
+
+        if (!preg_match('/^[a-z][a-z0-9_.]*$/i', $this->method)) {
+            throw new \JsonRpcLib\Server\Exception(
+                \JsonRpcLib\Server\Output\Error::INVALID_REQUEST(),
+                \JsonRpcLib\Server\Output\Error::INVALID_REQUEST
             );
         }
     }

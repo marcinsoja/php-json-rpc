@@ -25,21 +25,16 @@ class Server
 
                     $response = new Output\Response();
                     $response->id = $request->id;
-                    $response->error = array(
-                        'code'      => $e->getCode(),
-                        'message'   => $e->getMessage()
-                    );
+                    $response->error = new Output\Error($e->getMessage(), $e->getCode());
 
                     $output->addResponse($response);
                 }
             }
 
         } catch (Exception $e) {
+
             $response = new Output\Response();
-            $response->error = array(
-                'code'      => $e->getCode(),
-                'message'   => $e->getMessage()
-            );
+            $response->error = new Output\Error($e->getMessage(), $e->getCode());
 
             $output->addResponse($response);
         }
@@ -56,13 +51,21 @@ class Server
     {
         $request->valid();
 
-        // @todo process
+        try {
+            $result = 'result';
+        } catch (\Exception $e) {
+            throw new \JsonRpcLib\Server\Exception(
+                Output\Error::SERVER_ERROR(),
+                Output\Error::SERVER_ERROR,
+                $e
+            );
+        }
 
         $response = new Output\Response();
 
         if (false == $request->isNotification()) {
             $response->id = $request->id;
-            $response->result = 'result';
+            $response->result = $result;
         }
 
         return $response;

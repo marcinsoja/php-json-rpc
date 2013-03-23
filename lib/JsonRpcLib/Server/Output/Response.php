@@ -60,18 +60,21 @@ class Response
     {
         $array = (array) $this;
 
-        if (null !== $array['error']) {
+        if ($array['error'] instanceof Error) {
 
             unset($array['result']);
 
             $errors = array(
-                \JsonRpcLib\Error\Code::PARSE_ERROR,
-                \JsonRpcLib\Error\Code::INVALID_REQUEST
+                Error::PARSE_ERROR,
+                Error::INVALID_REQUEST
             );
 
-            if (in_array($array['error']['code'], $errors)) {
+            if (in_array($array['error']->getCode(), $errors)) {
                 $array['id'] = null;
             }
+
+             $array['error'] = $array['error']->toArray();
+
         } else {
 
             if (null === $array['id']) {

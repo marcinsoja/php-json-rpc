@@ -38,8 +38,6 @@ class Message
      */
     public function write()
     {
-        $isBatch = (count($this->responses) > 1);
-
         $responses = array();
         foreach ($this->responses as $response) {
             $responses[] = $response->toArray();
@@ -50,6 +48,8 @@ class Message
         if (empty($responses)) {
             return;
         }
+
+        $isBatch = (count($this->responses) > 1);
 
         if (false == $isBatch) {
             $responses = array_shift($responses);
