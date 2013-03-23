@@ -1,0 +1,13 @@
+{
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=5.3.3",
+        "phpunit/phpunit": "3.7.*",
+        "phpunit/php-invoker": "*"
+    },
+    "autoload": {
+        "psr-0": {
+            "JsonRpcLib": "../lib"
+        }
+    }
+}
