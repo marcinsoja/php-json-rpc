@@ -35,7 +35,7 @@ class Manager implements ManagerInterface
         if (array_key_exists($serviceName, $this->services)) {
             $service = $this->services[$serviceName];
 
-            if ($serviceName == $name && !$service instanceof \JsonRpcLib\Server\Service\Provider\ClosureProvider) {
+            if ($serviceName == $name && !$service instanceof \JsonRpcLib\Server\Service\Provider\CallableInterface) {
                 $service = null;
             }
         } elseif (array_key_exists(__CLASS__, $this->services)) {

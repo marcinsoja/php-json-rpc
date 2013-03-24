@@ -2,7 +2,7 @@
 
 namespace JsonRpcLib\Server\Service\Provider;
 
-class ClosureProvider implements ProviderInterface
+class ClosureProvider implements ProviderInterface, CallableInterface
 {
     /**
      *
