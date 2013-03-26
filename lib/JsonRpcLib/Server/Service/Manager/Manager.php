@@ -4,8 +4,24 @@ namespace JsonRpcLib\Server\Service\Manager;
 
 class Manager implements ManagerInterface
 {
+    /**
+     *
+     * @var \JsonRpcLib\Server\Service\Resolver\ResolverInterface 
+     */
+    private $resolver = null;
+    
+    /**
+     * @var array
+     */
     private $services = array();
 
+    /**
+     * @param \JsonRpcLib\Server\Service\Resolver\ResolverInterface $resolver
+     */
+    public function __construct(\JsonRpcLib\Server\Service\Resolver\ResolverInterface $resolver = null) {
+        $this->resolver = $resolver;
+    }
+    
     /**
      *
      * @param  \JsonRpcLib\Server\Service\Wrapper\WrapperInterface $service
@@ -30,7 +46,7 @@ class Manager implements ManagerInterface
      */
     public function getService($name)
     {
-        $serviceName = $this->getServiceName($name);
+        $serviceName = $this->getResolver()->getServiceName($name);
 
         if (array_key_exists($serviceName, $this->services)) {
             $service = $this->services[$serviceName];
@@ -52,29 +68,18 @@ class Manager implements ManagerInterface
      */
     public function execute(\JsonRpcLib\Server\Service\Wrapper\WrapperInterface $service, $name, array $params)
     {
-        $methodName = $this->getMethodName($name);
+        $methodName = $this->getResolver()->getMethodName($name);
 
         return $service->execute($methodName, $params);
     }
 
-    private function getServiceName($name)
-    {
-        return $this->getPart($name, 0);
-    }
-
-    private function getMethodName($name)
-    {
-        return $this->getPart($name, 1);
-    }
-
-    private function getPart($name, $part, $separator = '.')
-    {
-        $nameParts = explode($separator, $name, 2);
-
-        if (count($nameParts) == 2) {
-            return $nameParts[$part];
+    /**
+     * @return \JsonRpcLib\Server\Service\Resolver\ResolverInterface
+     */
+    public function getResolver() {
+        if(null == $this->resolver) {
+            $this->resolver = new \JsonRpcLib\Server\Service\Resolver\Resolver();
         }
-
-        return $name;
+        return $this->resolver;
     }
 }

@@ -14,7 +14,7 @@ class Server
      *
      * @param Service\Manager\ManagerInterface $manager
      */
-    public function __construct(Service\Manager\ManagerInterface $manager)
+    public function __construct(Service\Manager\ManagerInterface $manager = null)
     {
         $this->serviceManager = $manager;
     }
@@ -27,19 +27,19 @@ class Server
      */
     public function addService($service, $name = null)
     {
-        if ($service instanceof Service\Wrapper\WrapperInterface) {
-
-        } elseif ($service instanceof \Closure) {
-            $service = new Service\Wrapper\ClosureWrapper($service);
-        } elseif (is_object($service)) {
-            $service = new Service\Wrapper\ObjectWrapper($service);
+        if (false == $service instanceof Service\Wrapper\WrapperInterface) {
+            if ($service instanceof \Closure) {
+                $service = new Service\Wrapper\ClosureWrapper($service);
+            } elseif (is_object($service)) {
+                $service = new Service\Wrapper\ObjectWrapper($service);
+            }
         }
 
         if (false == $service instanceof Service\Wrapper\WrapperInterface) {
             throw new \InvalidArgumentException();
         }
 
-        $this->serviceManager->addService($service, $name);
+        $this->getServiceManager()->addService($service, $name);
 
         return $this;
     }
@@ -93,7 +93,7 @@ class Server
 
         try {
 
-            $service = $this->serviceManager->getService($request->method);
+            $service = $this->getServiceManager()->getService($request->method);
 
             if (null == $service) {
                 throw new \JsonRpcLib\Server\Exception(
@@ -102,7 +102,7 @@ class Server
                 );
             }
 
-            $result = $this->serviceManager->execute(
+            $result = $this->getServiceManager()->execute(
                 $service,
                 $request->method,
                 $request->getParams()
@@ -127,5 +127,15 @@ class Server
         }
 
         return $response;
+    }
+    
+    /**
+     * @return Service\Manager\ManagerInterface
+     */
+    private function getServiceManager() {
+        if(null == $this->serviceManager) {
+            $this->serviceManager = new Service\Manager\Manager();
+        }
+        return $this->serviceManager;
     }
 }
