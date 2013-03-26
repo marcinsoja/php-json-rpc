@@ -8,7 +8,7 @@ interface ManagerInterface
      * @return \JsonRpcLib\Server\Service\Resolver\ResolverInterface
      */
     public function getResolver();
-    
+
     /**
      * @param \JsonRpcLib\Server\Service\Wrapper\WrapperInterface $service
      * @param string                                              $name

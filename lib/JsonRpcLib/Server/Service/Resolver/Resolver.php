@@ -4,16 +4,16 @@ namespace JsonRpcLib\Server\Service\Resolver;
 
 /**
  * Standard resolver.
- * 
+ *
  * input    | service name  | method name
  * abc      | abc           | abc
  * abc.zxy  | abc           | zxy
- * 
+ *
  */
 class Resolver implements ResolverInterface
 {
     /**
-     * @param string $name
+     * @param  string $name
      * @return string
      */
     public function getServiceName($name)
@@ -22,7 +22,7 @@ class Resolver implements ResolverInterface
     }
 
     /**
-     * @param string $name
+     * @param  string $name
      * @return string
      */
     public function getMethodName($name)
@@ -31,10 +31,10 @@ class Resolver implements ResolverInterface
     }
 
     /**
-     * 
-     * @param string $name
-     * @param int $part
-     * @param string $separator
+     *
+     * @param  string $name
+     * @param  int    $part
+     * @param  string $separator
      * @return string
      */
     private function getPart($name, $part, $separator = '.')

@@ -128,14 +128,16 @@ class Server
 
         return $response;
     }
-    
+
     /**
      * @return Service\Manager\ManagerInterface
      */
-    private function getServiceManager() {
-        if(null == $this->serviceManager) {
+    private function getServiceManager()
+    {
+        if (null == $this->serviceManager) {
             $this->serviceManager = new Service\Manager\Manager();
         }
+
         return $this->serviceManager;
     }
 }

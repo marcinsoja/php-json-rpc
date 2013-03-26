@@ -6,10 +6,10 @@ class Manager implements ManagerInterface
 {
     /**
      *
-     * @var \JsonRpcLib\Server\Service\Resolver\ResolverInterface 
+     * @var \JsonRpcLib\Server\Service\Resolver\ResolverInterface
      */
     private $resolver = null;
-    
+
     /**
      * @var array
      */
@@ -18,10 +18,11 @@ class Manager implements ManagerInterface
     /**
      * @param \JsonRpcLib\Server\Service\Resolver\ResolverInterface $resolver
      */
-    public function __construct(\JsonRpcLib\Server\Service\Resolver\ResolverInterface $resolver = null) {
+    public function __construct(\JsonRpcLib\Server\Service\Resolver\ResolverInterface $resolver = null)
+    {
         $this->resolver = $resolver;
     }
-    
+
     /**
      *
      * @param  \JsonRpcLib\Server\Service\Wrapper\WrapperInterface $service
@@ -76,10 +77,12 @@ class Manager implements ManagerInterface
     /**
      * @return \JsonRpcLib\Server\Service\Resolver\ResolverInterface
      */
-    public function getResolver() {
-        if(null == $this->resolver) {
+    public function getResolver()
+    {
+        if (null == $this->resolver) {
             $this->resolver = new \JsonRpcLib\Server\Service\Resolver\Resolver();
         }
+
         return $this->resolver;
     }
 }
