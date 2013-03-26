@@ -21,21 +21,21 @@ class Server
 
     /**
      *
-     * @param  \JsonRpcLib\Server\Service\Provider\ProviderInterface|object $service
-     * @param  string|null                                                  $name
+     * @param  \JsonRpcLib\Server\Service\Wrapper\WrapperInterface|object $service
+     * @param  string|null                                                $name
      * @return Server
      */
     public function addService($service, $name = null)
     {
-        if ($service instanceof Service\Provider\ProviderInterface) {
+        if ($service instanceof Service\Wrapper\WrapperInterface) {
 
         } elseif ($service instanceof \Closure) {
-            $service = new Service\Provider\ClosureProvider($service);
+            $service = new Service\Wrapper\ClosureWrapper($service);
         } elseif (is_object($service)) {
-            $service = new Service\Provider\ObjectProvider($service);
+            $service = new Service\Wrapper\ObjectWrapper($service);
         }
 
-        if (false == $service instanceof Service\Provider\ProviderInterface) {
+        if (false == $service instanceof Service\Wrapper\WrapperInterface) {
             throw new \InvalidArgumentException();
         }
 

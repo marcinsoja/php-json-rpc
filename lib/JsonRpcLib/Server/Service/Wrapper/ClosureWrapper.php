@@ -1,8 +1,8 @@
 <?php
 
-namespace JsonRpcLib\Server\Service\Provider;
+namespace JsonRpcLib\Server\Service\Wrapper;
 
-class ClosureProvider implements ProviderInterface, CallableInterface
+class ClosureWrapper implements WrapperInterface, CallableInterface
 {
     /**
      *

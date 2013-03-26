@@ -38,7 +38,7 @@ class ServerTest extends PHPUnit_Framework_TestCase
         
         $server = new JsonRpcLib\Server\Server($manager);
         
-        $server->addService(new \JsonRpcLib\Server\Service\Provider\ClosureProvider($this->closureSum), 'sum');
+        $server->addService(new \JsonRpcLib\Server\Service\Wrapper\ClosureWrapper($this->closureSum), 'sum');
         $server->addService($this->serviceObject, 'serviceObject');
         
         $server->dispatch($inputMessage, $outputMessage);

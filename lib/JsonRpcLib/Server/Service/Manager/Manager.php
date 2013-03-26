@@ -8,11 +8,11 @@ class Manager implements ManagerInterface
 
     /**
      *
-     * @param  \JsonRpcLib\Server\Service\Provider\ProviderInterface $service
-     * @param  string                                                $name
+     * @param  \JsonRpcLib\Server\Service\Wrapper\WrapperInterface $service
+     * @param  string                                              $name
      * @return \JsonRpcLib\Server\Service\Manager\Manager
      */
-    public function addService(\JsonRpcLib\Server\Service\Provider\ProviderInterface $service, $name = null)
+    public function addService(\JsonRpcLib\Server\Service\Wrapper\WrapperInterface $service, $name = null)
     {
         if (null === $name) {
             $name = __CLASS__;
@@ -25,8 +25,8 @@ class Manager implements ManagerInterface
 
     /**
      *
-     * @param  type                                                       $name
-     * @return \JsonRpcLib\Server\Service\Provider\ProviderInterface|null
+     * @param  type                                                     $name
+     * @return \JsonRpcLib\Server\Service\Wrapper\WrapperInterface|null
      */
     public function getService($name)
     {
@@ -35,7 +35,7 @@ class Manager implements ManagerInterface
         if (array_key_exists($serviceName, $this->services)) {
             $service = $this->services[$serviceName];
 
-            if ($serviceName == $name && !$service instanceof \JsonRpcLib\Server\Service\Provider\CallableInterface) {
+            if ($serviceName == $name && !$service instanceof \JsonRpcLib\Server\Service\Wrapper\CallableInterface) {
                 $service = null;
             }
         } elseif (array_key_exists(__CLASS__, $this->services)) {
@@ -46,11 +46,11 @@ class Manager implements ManagerInterface
     }
 
     /**
-     * @param \JsonRpcLib\Server\Service\Provider\ProviderInterface $service
-     * @param string                                                $method
-     * @param array                                                 $params
+     * @param \JsonRpcLib\Server\Service\Wrapper\WrapperInterface $service
+     * @param string                                              $method
+     * @param array                                               $params
      */
-    public function execute(\JsonRpcLib\Server\Service\Provider\ProviderInterface $service, $name, array $params)
+    public function execute(\JsonRpcLib\Server\Service\Wrapper\WrapperInterface $service, $name, array $params)
     {
         $methodName = $this->getMethodName($name);
 
