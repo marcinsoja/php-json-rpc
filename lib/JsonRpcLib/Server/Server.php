@@ -51,7 +51,8 @@ class Server
      */
     public function dispatch(
         \JsonRpcLib\Server\Input\Message $input,
-        \JsonRpcLib\Server\Output\Message $output) {
+        \JsonRpcLib\Server\Output\Message $output)
+    {
 
         try {
             $requests = $input->getIterator();
@@ -80,6 +81,27 @@ class Server
         }
 
         $output->write();
+    }
+
+    /**
+     * @param  \JsonRpcLib\Server\Input\Message|null  $input
+     * @param  \JsonRpcLib\Server\Output\Message|null $output
+     * @return \JsonRpcLib\Server\Output\Data\Output
+     */
+    public function handle(
+        \JsonRpcLib\Server\Input\Message $input = null,
+        \JsonRpcLib\Server\Output\Message $output = null)
+    {
+        if (null == $input) {
+            $input = new Input\Data\Input();
+        }
+        if (null == $output) {
+            $output = new Output\Data\Output();
+        }
+
+        $this->dispatch($input, $output);
+
+        return $output;
     }
 
     /**
