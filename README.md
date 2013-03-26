@@ -115,7 +115,7 @@ $server->addService($service, 'math'); // math.sum
 
 ```
 
-### Multiple service
+### Multiple services
 
 ```
 #!php
