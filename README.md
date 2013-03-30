@@ -1,5 +1,9 @@
 # PHP JSON-RPC Lib
 
+##Build Status
+
+[![Build Status](https://travis-ci.org/marcinsoja/php-json-rpc.png?branch=master)](https://travis-ci.org/marcinsoja/php-json-rpc)
+
 ## Version
 
 The current version is considered Beta. This means that it is ready enough to test and use, but beware that you should update frequently.
