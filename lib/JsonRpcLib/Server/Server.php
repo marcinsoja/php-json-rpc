@@ -93,10 +93,10 @@ class Server
         \JsonRpcLib\Server\Output\Message $output = null)
     {
         if (null == $input) {
-            $input = new Input\Data\Input();
+            $input = new Input\Message(new Input\Data\Input());
         }
         if (null == $output) {
-            $output = new Output\Data\Output();
+            $output = new Output\Message(new Output\Data\Output());
         }
 
         $this->dispatch($input, $output);
