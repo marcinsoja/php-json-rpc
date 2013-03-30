@@ -18,7 +18,7 @@ JSON-RPC Server/Client for PHP 5.3
 
 ### PHAR
 
-From the downloads tab, download the latest phar build. Then, just require the phar in your code!
+[Download](https://s3-eu-west-1.amazonaws.com/php-json-rpc/JsonRpcLib.phar) the latest phar build. Then, just require the phar in your code!
 
 `require_once '/path/to/JsonRpcLib.phar';`
 

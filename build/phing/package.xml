@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="package" default="package" basedir="../../">
+    <property file="build/build.properties" />
+    <property file="build/local.properties" />
+
+     <target name="package">
+		 <delete dir="${path.results/lib" />
+		 <delete dir="${path.package}" />
+		 <mkdir dir="${path.results}/lib" />
+		 <mkdir dir="${path.package}" />
+		 <exec
+            os="Linux"
+            outputProperty="version.number"
+            command="git rev-parse HEAD"
+            dir="${project.basedir}"
+            />
+		<phingcall target="copyFilesToResultsLib" />
+        <phingcall target="packageFiles" />
+		<phingcall target="packagePhar" />
+        <if>
+            <isset property="amazon.key"/>
+            <then>
+                <phingcall target="upload" />
+            </then> 
+        </if>
+		
+    </target>
+
+	<target name="upload">
+        <s3put source="${path.package}/JsonRpcLib.phar" object="JsonRpcLib.phar" />
+	</target>
+    
+	<target name="copyFilesToResultsLib">
+		<delete dir="${path.results}/lib" />
+		<mkdir dir="${path.results}/lib" />
+
+        <copy todir="${path.results}/lib">
+            <filterchain>
+                <replacetokens begintoken="@@" endtoken="@@">
+                    <token key="version" value="${version.number}" />
+                </replacetokens>
+            </filterchain>
+            <fileset dir="${path.lib}">
+                <include name="**/**" />
+            </fileset>
+        </copy>
+	</target>
+
+	<target name="packageFiles">
+		<zip destfile="${path.package}/JsonRpcLib.zip">
+            <fileset dir="${path.results}/lib">
+                <include name="**/**" />
+            </fileset>
+        </zip>
+        <filehash file="${path.package}/JsonRpcLib.zip" hashtype="0" propertyname="filehash" />
+        <echo message="${filehash}" file="${path.package}/JsonRpcLib.zip.md5" />
+        <filehash file="${path.package}/JsonRpcLib.zip" hashtype="1" propertyname="filehash" />
+        <echo message="${filehash}" file="${path.package}/JsonRpcLib.zip.sha1" />
+	</target>
+
+	<target name="packagePhar">
+		<pharpackage
+            destfile="${path.package}/JsonRpcLib.phar"
+            basedir="${path.results}/lib"
+            stub="${path.build}/phar.stub.php"
+            signature="sha1"
+            >
+            <fileset dir="${path.results}/lib">
+                <include name="**/**" />
+            </fileset>
+            <metadata>
+                <element name="version" value="${version.number}" />
+            </metadata>
+        </pharpackage>
+        <phingcall target="writeFileHashes">
+            <property name="filename" value="${path.package}/JsonRpcLib.phar" />
+        </phingcall>
+	</target>
+
+    <target name="writeFileHashes">
+        <filehash file="${filename}" hashtype="0" propertyname="filehash" />
+        <echo message="${filehash}" file="${filename}.md5" />
+        <filehash file="${filename}" hashtype="1" propertyname="filehash" />
+        <echo message="${filehash}" file="${filename}.sha1" />
+    </target>
+</project>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="tests" default="test" basedir="../../">
+    <property file="build/build.properties" />
+
+    <target name="test">
+        <phingcall target="lint" />
+        <phingcall target="unit-all" />
+    </target>
+
+    <target name="test-lite">
+        <phingcall target="unit" />
+    </target>
+
+    <target name="unit-all">
+        <delete dir="${path.results}/coverage" />
+        <mkdir dir="${path.results}/coverage" />
+        <exec
+            passthru="true"
+            checkreturn="true"
+            command="${cmd.phpunit} --configuration &quot;${project.basedir}/tests/phpunit.xml.dist&quot;
+                                    --coverage-html &quot;${path.results}/coverage&quot;"
+        />
+    </target>
+    <target name="unit">
+        <exec
+            passthru="true"
+            checkreturn="true"
+            command="${cmd.phpunit} --configuration &quot;${project.basedir}/tests/phpunit.xml.dist&quot;"
+        />
+    </target>
+
+    <target name="lint">
+        <phplint haltonfailure="true" deprecatedAsError="true">
+            <fileset dir="${path.lib}">
+                <include name="**/*.php" />
+            </fileset>
+        </phplint>
+    </target>
+
+</project>
