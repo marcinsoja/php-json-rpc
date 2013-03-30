@@ -29,7 +29,7 @@ Add a `composer.json` file to your project with the following:
 ```javascript
 {
     "require": {
-        "JsonRpcLib/JsonRpcLib": "*"
+        "json-rpc-lib/json-rpc-lib": "dev-master"
     }
 }
 ```
