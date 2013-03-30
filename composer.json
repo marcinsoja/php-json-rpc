@@ -1,5 +1,5 @@
 {
-    "name": "JsonRpcLib/JsonRpcLib",
+    "name": "json-rpc-lib/json-rpc-lib",
     "description": "JSON-RPC Server/Client for PHP 5.3",
     "keywords": ["json-rpc", "rpc", "server", "client", "json"],
     "homepage": "https://github.com/marcinsoja/php-json-rpc",
