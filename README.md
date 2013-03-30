@@ -1,6 +1,4 @@
-# PHP JSON-RPC Server
-
-@todo
+# PHP JSON-RPC Lib
 
 ## Version
 
@@ -10,7 +8,7 @@ As this software is BETA, Use at your own risk!
 
 ## About
 
-JsonRpcLib...
+JSON-RPC Server/Client for PHP 5.3
 
 ## Installation
 
@@ -41,7 +39,7 @@ Then, in your code, just use the composer autoloader:
 
 That's it!
 
-## Usage
+## Usage - Server
 
 Most use-cases can simply use the root `JsonRpcLib\Server\Server` class.
 
@@ -182,6 +180,3 @@ PHP JsonRpcLib will support two install methods. The first method is a single fi
 
 The library should be very easy to extend and add new functionality.
 
-# PHP JSON-RPC Client
-
-...
