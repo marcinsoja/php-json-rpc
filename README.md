@@ -26,8 +26,7 @@ From the downloads tab, download the latest phar build. Then, just require the p
 
 Add a `composer.json` file to your project with the following:
 
-```
-#!json
+```javascript
 {
     "require": {
         "JsonRpcLib/JsonRpcLib": "*"
@@ -48,8 +47,7 @@ That's it!
 Most use-cases can simply use the root `JsonRpcLib\Server\Server` class.
 
 
-```
-#!php
+```php
 <?php
 
 require_once 'vendor/autoload.php';
@@ -64,8 +62,7 @@ $server->handle();
 
 ### Service Closure
 
-```
-#!php
+```php
 <?php
 
 require_once 'vendor/autoload.php';
@@ -83,8 +80,7 @@ $server->handle();
 
 ### Service Object
 
-```
-#!php
+```php
 <?php
 
 require_once 'vendor/autoload.php';
@@ -105,8 +101,7 @@ $server->handle();
 
 or
 
-```
-#!php
+```php
 <?php
 
 // ...
@@ -119,8 +114,7 @@ $server->addService($service, 'math'); // math.sum
 
 ### Multiple services
 
-```
-#!php
+```php
 <?php
 
 // ...
@@ -143,8 +137,7 @@ $server->addService($userService, 'user'); // user.getName, user.getSurname, use
 
 ### Full configuration
 
-```
-#!php
+```php
 <?php
 
 $in = new JsonRpcLib\Server\Input\Data\Input();
