@@ -22,6 +22,13 @@ class ObjectWrapper implements WrapperInterface
         $this->object = $object;
     }
 
+    /**
+     *
+     * @param  string                       $name
+     * @param  array                        $params
+     * @return mixed
+     * @throws \JsonRpcLib\Server\Exception
+     */
     public function execute($name, array $params)
     {
         if (false == method_exists($this->object, $name)) {
@@ -32,24 +39,28 @@ class ObjectWrapper implements WrapperInterface
         }
 
         $reflectionMethod = new \ReflectionMethod(get_class($this->object), $name);
-        $methodParams = $reflectionMethod->getParameters();
 
-        $requiredParams = 0;
+        $helper = new Helper();
 
-        foreach ($methodParams as $param) {
-            if (false == $param->isOptional()) {
-                $requiredParams++;
-            }
-        }
-
-        if (count($params) < $requiredParams || count($params) > count($methodParams)) {
+        if (false == $helper->isValidParameters($reflectionMethod, $params)) {
             throw new \JsonRpcLib\Server\Exception(
                 \JsonRpcLib\Server\Output\Error::INVALID_PARAMS(),
                 \JsonRpcLib\Server\Output\Error::INVALID_PARAMS
             );
         }
 
-        // @todo named params
-        return call_user_func_array(array($this->object, $name), $params);
+        $parameters = $helper->normalizeParameters(
+            $helper->getParametersNames($reflectionMethod),
+            $params
+        );
+
+        if (false == $helper->isValidParameters($reflectionMethod, $parameters)) {
+            throw new \JsonRpcLib\Server\Exception(
+                \JsonRpcLib\Server\Output\Error::INVALID_PARAMS(),
+                \JsonRpcLib\Server\Output\Error::INVALID_PARAMS
+            );
+        }
+
+        return call_user_func_array(array($this->object, $name), $parameters);
     }
 }

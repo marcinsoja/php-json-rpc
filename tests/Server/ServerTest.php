@@ -73,8 +73,14 @@ class ServerTest extends PHPUnit_Framework_TestCase
             array('[{"jsonrpc":"2.0","method":"serviceObject.subtractNumbers","params":[50, 10],"id":109}, {"jsonrpc":"2.0","method":"serviceObject.updateDB","params":[1]}, {"jsonrpc":"2.0","method":"serviceObject.updateDB","params":[1,2]}]', 
                   '[{"jsonrpc":"2.0","result":40,"id":109}]'),
             
-            array('[{"jsonrpc":"2.0","method":"serviceObject.subtractNumbers","params":[60, 10],"id":1}, {"jsonrpc":"2.0","method":"serviceObject.subtractNumbers","params":{"subtrahend":10,"minuend":5},"id":3}]', 
+            array('[{"jsonrpc":"2.0","method":"serviceObject.subtractNumbers","params":[60, 10],"id":1}, {"jsonrpc":"2.0","method":"serviceObject.subtractNumbers","params":{"a":10,"b":5},"id":3}]', 
                   '[{"jsonrpc":"2.0","result":50,"id":1},{"jsonrpc":"2.0","result":5,"id":3}]'),
+            
+            array('{"jsonrpc":"2.0","method":"sum","params":{"b":42, "a":23},"id":1}', 
+                  '{"jsonrpc":"2.0","result":65,"id":1}'),
+            
+            array('{"jsonrpc":"2.0","method":"serviceObject.subtractNumbers","params":{"b":10, "a":60},"id":1}', 
+                  '{"jsonrpc":"2.0","result":50,"id":1}'),
         );
     }
     
@@ -139,6 +145,12 @@ class ServerTest extends PHPUnit_Framework_TestCase
                   '{"jsonrpc":"2.0","error":{"code":-32600,"message":"Invalid Request"},"id":null}'),
             
             array('{"jsonrpc":"2.0","method":"sum","params":[42, 23, 48],"id":1}', 
+                  '{"jsonrpc":"2.0","error":{"code":-32602,"message":"Invalid params"},"id":1}'),
+            
+            array('{"jsonrpc":"2.0","method":"serviceObject.subtractNumbers","params":{"b":10, "a":60, "c":5},"id":1}', 
+                  '{"jsonrpc":"2.0","error":{"code":-32602,"message":"Invalid params"},"id":1}'),
+            
+            array('{"jsonrpc":"2.0","method":"serviceObject.subtractNumbers","params":{"b":10},"id":1}', 
                   '{"jsonrpc":"2.0","error":{"code":-32602,"message":"Invalid params"},"id":1}'),
         );
     }
