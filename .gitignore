@@ -1,0 +1,6 @@
+.gitignore
+build/results/*
+build/local.properties
+vendor/*
+composer.lock
+composer.phar
