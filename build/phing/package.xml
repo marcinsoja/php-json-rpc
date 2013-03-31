@@ -4,7 +4,7 @@
     <property file="build/local.properties" />
 
      <target name="package">
-		 <delete dir="${path.results/lib" />
+		 <delete dir="${path.results}/lib" />
 		 <delete dir="${path.package}" />
 		 <mkdir dir="${path.results}/lib" />
 		 <mkdir dir="${path.package}" />
