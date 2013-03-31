@@ -17,7 +17,7 @@
         <exec
             passthru="true"
             checkreturn="true"
-            command="${cmd.phpunit} --configuration &quot;${project.basedir}/tests/phpunit.xml.dist&quot;
+            command="${cmd.phpunit} --configuration &quot;${project.basedir}/phpunit.xml.dist&quot;
                                     --coverage-html &quot;${path.results}/coverage&quot;"
         />
     </target>
@@ -25,7 +25,7 @@
         <exec
             passthru="true"
             checkreturn="true"
-            command="${cmd.phpunit} --configuration &quot;${project.basedir}/tests/phpunit.xml.dist&quot;"
+            command="${cmd.phpunit} --configuration &quot;${project.basedir}/phpunit.xml.dist&quot;"
         />
     </target>
 
