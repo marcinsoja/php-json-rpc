@@ -11,10 +11,10 @@ class Output implements DataInterface
     public function write($data)
     {
         $this->sendHeaders($data);
-        
+
         echo $data;
     }
-    
+
     public function sendHeaders($data)
     {
         if (headers_sent()) {
@@ -23,6 +23,7 @@ class Output implements DataInterface
 
         if (empty($data)) {
             header('HTTP/1.1 204 No Content');
+
             return;
         }
 

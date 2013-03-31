@@ -48,9 +48,9 @@ class Manager implements ManagerInterface
     public function getService($name)
     {
         $serviceName = $this->getResolver()->getServiceName($name);
-        
+
         $service = null;
-        
+
         if (array_key_exists($serviceName, $this->services)) {
             $service = $this->services[$serviceName];
 
