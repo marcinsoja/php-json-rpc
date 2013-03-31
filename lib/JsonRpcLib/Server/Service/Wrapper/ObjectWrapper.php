@@ -39,6 +39,13 @@ class ObjectWrapper implements WrapperInterface
         }
 
         $reflectionMethod = new \ReflectionMethod(get_class($this->object), $name);
+        
+        if(false == $reflectionMethod->isPublic()) {
+            throw new \JsonRpcLib\Server\Exception(
+                \JsonRpcLib\Server\Output\Error::METHOD_NOT_FOUND(),
+                \JsonRpcLib\Server\Output\Error::METHOD_NOT_FOUND
+            );
+        }
 
         $helper = new Helper();
 

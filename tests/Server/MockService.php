@@ -20,4 +20,7 @@ class MockService {
     public function error() {
         throw new \Exception('Error');
     }
+    private function privateFn($a) {
+        return $a;
+    }
 }

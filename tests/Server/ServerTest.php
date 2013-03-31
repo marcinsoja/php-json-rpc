@@ -114,6 +114,9 @@ class ServerTest extends PHPUnit_Framework_TestCase
             array('{"jsonrpc":"2.0","method":"foobar,"params":"bar","baz]', 
                   '{"jsonrpc":"2.0","error":{"code":-32700,"message":"Parse error"},"id":null}'),
             
+            array('{"jsonrpc":"2.0","method":"solo.privateFn","params":"bar","id":8}', 
+                  '{"jsonrpc":"2.0","error":{"code":-32601,"message":"Method not found"},"id":8}'),
+            
             array('{"jsonrpc":"2.0","method":1,"params":"bar"}',
                   '{"jsonrpc":"2.0","error":{"code":-32600,"message":"Invalid Request"},"id":null}'),
             
