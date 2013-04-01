@@ -21,20 +21,20 @@
     </target>
 
     <target name="clean" description="Cleanup build artifacts">
-        <delete dir="${basedir}/ci/api"/>
-        <delete dir="${basedir}/ci/code-browser"/>
-        <delete dir="${basedir}/ci/coverage"/>
-        <delete dir="${basedir}/ci/logs"/>
-        <delete dir="${basedir}/ci/pdepend"/>
+        <delete dir="${basedir}/api"/>
+        <delete dir="${basedir}/code-browser"/>
+        <delete dir="${basedir}/coverage"/>
+        <delete dir="${basedir}/logs"/>
+        <delete dir="${basedir}/pdepend"/>
     </target>
 
     <target name="prepare" depends="clean" description="Prepare for build">
-        <mkdir dir="${basedir}/ci/api"/>
-        <mkdir dir="${basedir}/ci/code-browser"/>
-        <mkdir dir="${basedir}/ci/coverage"/>
-        <mkdir dir="${basedir}/ci/logs"/>
-        <mkdir dir="${basedir}/ci/pdepend"/>
-        <mkdir dir="${basedir}/ci/phpdox"/>
+        <mkdir dir="${basedir}/api"/>
+        <mkdir dir="${basedir}/code-browser"/>
+        <mkdir dir="${basedir}/coverage"/>
+        <mkdir dir="${basedir}/logs"/>
+        <mkdir dir="${basedir}/pdepend"/>
+        <mkdir dir="${basedir}/phpdox"/>
     </target>
 
     <target name="lint" description="Perform syntax check of sourcecode files">
@@ -56,16 +56,16 @@
     <target name="phploc" description="Measure project size using PHPLOC">
         <exec executable="phploc">
             <arg value="--log-csv" />
-            <arg value="${basedir}/ci/logs/phploc.csv" />
+            <arg value="${basedir}/logs/phploc.csv" />
             <arg path="${basedir}/lib" />
         </exec>
     </target>
 
     <target name="pdepend" description="Calculate software metrics using PHP_Depend">
         <exec executable="pdepend">
-            <arg value="--jdepend-xml=${basedir}/ci/logs/jdepend.xml" />
-            <arg value="--jdepend-chart=${basedir}/ci/pdepend/dependencies.svg" />
-            <arg value="--overview-pyramid=${basedir}/ci/pdepend/overview-pyramid.svg" />
+            <arg value="--jdepend-xml=${basedir}/logs/jdepend.xml" />
+            <arg value="--jdepend-chart=${basedir}/pdepend/dependencies.svg" />
+            <arg value="--overview-pyramid=${basedir}/pdepend/overview-pyramid.svg" />
             <arg path="${basedir}/lib" />
         </exec>
     </target>
@@ -75,7 +75,7 @@
         <exec executable="phpmd">
             <arg path="${basedir}/lib" />
             <arg value="text" />
-            <arg value="${basedir}/ci/phpmd.xml" />
+            <arg value="${basedir}/phpmd.xml" />
         </exec>
     </target>
 
@@ -83,9 +83,9 @@
         <exec executable="phpmd">
             <arg path="${basedir}/lib" />
             <arg value="xml" />
-            <arg value="${basedir}/ci/phpmd.xml" />
+            <arg value="${basedir}/phpmd.xml" />
             <arg value="--reportfile" />
-            <arg value="${basedir}/ci/logs/pmd.xml" />
+            <arg value="${basedir}/logs/pmd.xml" />
         </exec>
     </target>
 
@@ -100,8 +100,8 @@
     <target name="phpcs-ci" description="Find coding standard violations using PHP_CodeSniffer creating a log file for the continuous integration server">
         <exec executable="phpcs" output="/dev/null">
             <arg value="--report=checkstyle" />
-            <arg value="--report-file=${basedir}/ci/logs/checkstyle.xml" />
-            <arg value="--standard=${basedir}/ci/phpcs.xml" />
+            <arg value="--report-file=${basedir}/logs/checkstyle.xml" />
+            <arg value="--standard=${basedir}/phpcs.xml" />
             <arg path="${basedir}/lib" />
         </exec>
     </target>
@@ -109,7 +109,7 @@
     <target name="phpcpd" description="Find duplicate code using PHPCPD">
         <exec executable="phpcpd">
             <arg value="--log-pmd" />
-            <arg value="${basedir}/ci/logs/pmd-cpd.xml" />
+            <arg value="${basedir}/logs/pmd-cpd.xml" />
             <arg path="${basedir}/lib" />
         </exec>
     </target>
@@ -117,7 +117,7 @@
     <target name="phpdox" description="Generate API documentation using phpDox">
         <exec executable="phpdox">
             <arg value="-f" />
-            <arg value="${basedir}/ci/phpdox.xml" />
+            <arg value="${basedir}/phpdox.xml" />
         </exec>
     </target>
 
@@ -128,11 +128,11 @@
     <target name="phpcb" description="Aggregate tool output with PHP_CodeBrowser">
         <exec executable="phpcb">
             <arg value="--log" />
-            <arg path="${basedir}/ci/logs" />
+            <arg path="${basedir}/logs" />
             <arg value="--source" />
             <arg path="${basedir}/lib" />
             <arg value="--output" />
-            <arg path="${basedir}/ci/code-browser" />
+            <arg path="${basedir}/code-browser" />
         </exec>
     </target>
 </project>
