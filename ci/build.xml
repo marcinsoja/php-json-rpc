@@ -101,7 +101,7 @@
         <exec executable="phpcs" output="/dev/null">
             <arg value="--report=checkstyle" />
             <arg value="--report-file=${basedir}/logs/checkstyle.xml" />
-            <arg value="--standard=${basedir}/phpcs.xml" />
+            <arg value="--standard=PSR2" />
             <arg path="${basedir}/../lib" />
         </exec>
     </target>
