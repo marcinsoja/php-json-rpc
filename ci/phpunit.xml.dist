@@ -1,0 +1,28 @@
+<phpunit bootstrap="../tests/bootstrap.php" colors="true"
+        colors="true" 
+        backupGlobals="false"
+        backupStaticAttributes="false"
+        strict="true"
+        verbose="true" >
+    <testsuites>
+        <testsuite name="JsonRpcLib/JsonRpcLib server test suite">
+            <directory>../tests/Server</directory>
+        </testsuite>
+        <testsuite name="JsonRpcLib/JsonRpcLib client test suite">
+            <directory>../tests/Client</directory>
+        </testsuite>
+    </testsuites>
+    <filter>
+        <whitelist>
+            <directory>../lib</directory>
+        </whitelist>
+    </filter>
+    <logging>
+    <log type="coverage-html" target="coverage" title="JsonRpcLib"
+         charset="UTF-8" yui="true" highlight="true"
+         lowUpperBound="35" highLowerBound="70"/>
+    <log type="coverage-clover" target="logs/clover.xml"/>
+    <log type="junit" target="logs/junit.xml"
+         logIncompleteSkipped="false"/>
+   </logging>
+</phpunit>
