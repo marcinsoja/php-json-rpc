@@ -20,6 +20,16 @@
         </parallel>
     </target>
 
+    <target name="fix" description="Fix CS">
+        <exec executable="php">
+            <arg path="${basedir}/../php-cs-fixer.phar" />
+            <arg value="-v" />
+            <arg value="fix" />
+            <arg path="${basedir}/../lib" />
+            <arg value="--level=all" />
+        </exec>
+    </target>
+    
     <target name="clean" description="Cleanup build artifacts">
         <delete dir="${basedir}/api"/>
         <delete dir="${basedir}/code-browser"/>
