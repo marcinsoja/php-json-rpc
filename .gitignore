@@ -4,3 +4,10 @@ build/local.properties
 vendor/*
 composer.lock
 composer.phar
+ci/api/*
+ci/coverage/*
+ci/logs/*
+ci/pdepend/*
+ci/phpdox/*
+ci/code-browser/*
+ci/cache.properties
