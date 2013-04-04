@@ -155,6 +155,10 @@ class ServerTest extends PHPUnit_Framework_TestCase
             
             array('{"jsonrpc":"2.0","method":"serviceObject.subtractNumbers","params":{"b":10},"id":1}', 
                   '{"jsonrpc":"2.0","error":{"code":-32602,"message":"Invalid params"},"id":1}'),
+            
+            array('{"jsonrpc":"2.0","method":"serviceObject.staticFn","params":{"a":10},"id":1}', 
+                  '{"jsonrpc":"2.0","error":{"code":-32601,"message":"Method not found"},"id":1}'),
+            
         );
     }
 }

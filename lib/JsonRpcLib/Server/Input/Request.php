@@ -2,6 +2,9 @@
 
 namespace JsonRpcLib\Server\Input;
 
+use \JsonRpcLib\Server\Exception;
+use \JsonRpcLib\Server\Output\Error;
+
 class Request
 {
     /**
@@ -60,24 +63,15 @@ class Request
     public function valid()
     {
         if ('2.0' != $this->jsonrpc) {
-            throw new \JsonRpcLib\Server\Exception(
-                \JsonRpcLib\Server\Output\Error::INVALID_REQUEST(),
-                \JsonRpcLib\Server\Output\Error::INVALID_REQUEST
-            );
+            throw new Exception(Error::INVALID_REQUEST(), Error::INVALID_REQUEST);
         }
 
         if (empty($this->method)) {
-            throw new \JsonRpcLib\Server\Exception(
-                \JsonRpcLib\Server\Output\Error::INVALID_REQUEST(),
-                \JsonRpcLib\Server\Output\Error::INVALID_REQUEST
-            );
+            throw new Exception(Error::INVALID_REQUEST(), Error::INVALID_REQUEST);
         }
 
         if (!preg_match('/^[a-z][a-z0-9_.]*$/i', $this->method)) {
-            throw new \JsonRpcLib\Server\Exception(
-                \JsonRpcLib\Server\Output\Error::INVALID_REQUEST(),
-                \JsonRpcLib\Server\Output\Error::INVALID_REQUEST
-            );
+            throw new Exception(Error::INVALID_REQUEST(), Error::INVALID_REQUEST);
         }
     }
 

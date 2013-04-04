@@ -23,4 +23,7 @@ class MockService {
     private function privateFn($a) {
         return $a;
     }
+    public static function staticFn($a) {
+        return $a;
+    }
 }

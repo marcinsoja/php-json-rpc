@@ -2,6 +2,8 @@
 
 namespace JsonRpcLib\Server\Service\Manager;
 
+use \JsonRpcLib\Server\Service\Wrapper\WrapperInterface;
+
 interface ManagerInterface
 {
     /**
@@ -13,7 +15,7 @@ interface ManagerInterface
      * @param \JsonRpcLib\Server\Service\Wrapper\WrapperInterface $service
      * @param string                                              $name
      */
-    public function addService(\JsonRpcLib\Server\Service\Wrapper\WrapperInterface $service, $name);
+    public function addService(WrapperInterface $service, $name);
 
     /**
      * @param  string                                              $name
@@ -26,5 +28,5 @@ interface ManagerInterface
      * @param string                                              $method
      * @param array                                               $params
      */
-    public function execute(\JsonRpcLib\Server\Service\Wrapper\WrapperInterface $service, $method, array $params);
+    public function execute(WrapperInterface $service, $method, array $params);
 }

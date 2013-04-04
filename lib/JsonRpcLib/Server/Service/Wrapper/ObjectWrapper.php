@@ -2,6 +2,9 @@
 
 namespace JsonRpcLib\Server\Service\Wrapper;
 
+use \JsonRpcLib\Server\Output\Error;
+use \JsonRpcLib\Server\Exception;
+
 class ObjectWrapper implements WrapperInterface
 {
     /**
@@ -32,28 +35,24 @@ class ObjectWrapper implements WrapperInterface
     public function execute($name, array $params)
     {
         if (false == method_exists($this->object, $name)) {
-            throw new \JsonRpcLib\Server\Exception(
-                \JsonRpcLib\Server\Output\Error::METHOD_NOT_FOUND(),
-                \JsonRpcLib\Server\Output\Error::METHOD_NOT_FOUND
-            );
+            throw new Exception(Error::METHOD_NOT_FOUND(), Error::METHOD_NOT_FOUND);
         }
 
         $reflectionMethod = new \ReflectionMethod(get_class($this->object), $name);
 
-        if (false == $reflectionMethod->isPublic()) {
-            throw new \JsonRpcLib\Server\Exception(
-                \JsonRpcLib\Server\Output\Error::METHOD_NOT_FOUND(),
-                \JsonRpcLib\Server\Output\Error::METHOD_NOT_FOUND
-            );
+        $isAllowed = $reflectionMethod->isPublic()
+            && false == $reflectionMethod->isStatic()
+            && $reflectionMethod->isUserDefined()
+        ;
+
+        if (false == $isAllowed) {
+            throw new Exception(Error::METHOD_NOT_FOUND(), Error::METHOD_NOT_FOUND);
         }
 
         $helper = new Helper();
 
         if (false == $helper->isValidParameters($reflectionMethod, $params)) {
-            throw new \JsonRpcLib\Server\Exception(
-                \JsonRpcLib\Server\Output\Error::INVALID_PARAMS(),
-                \JsonRpcLib\Server\Output\Error::INVALID_PARAMS
-            );
+            throw new Exception(Error::INVALID_PARAMS(), Error::INVALID_PARAMS);
         }
 
         $parameters = $helper->normalizeParameters(
@@ -62,10 +61,7 @@ class ObjectWrapper implements WrapperInterface
         );
 
         if (false == $helper->isValidParameters($reflectionMethod, $parameters)) {
-            throw new \JsonRpcLib\Server\Exception(
-                \JsonRpcLib\Server\Output\Error::INVALID_PARAMS(),
-                \JsonRpcLib\Server\Output\Error::INVALID_PARAMS
-            );
+            throw new Exception(Error::INVALID_PARAMS(), Error::INVALID_PARAMS);
         }
 
         return call_user_func_array(array($this->object, $name), $parameters);

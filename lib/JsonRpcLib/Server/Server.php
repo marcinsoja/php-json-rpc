@@ -2,6 +2,16 @@
 
 namespace JsonRpcLib\Server;
 
+use \JsonRpcLib\Server\Service\Wrapper\WrapperInterface;
+use \JsonRpcLib\Server\Service\Wrapper\ClosureWrapper;
+use \JsonRpcLib\Server\Service\Wrapper\ObjectWrapper;
+use \JsonRpcLib\Server\Input\Message as InputMessage;
+use \JsonRpcLib\Server\Output\Message as OutputMessage;
+use \JsonRpcLib\Server\Input\Data\Input as DataInput;
+use \JsonRpcLib\Server\Output\Data\Output as DataOutput;
+use \JsonRpcLib\Server\Output\Error;
+use \JsonRpcLib\Server\Exception;
+
 class Server
 {
     /**
@@ -27,15 +37,15 @@ class Server
      */
     public function addService($service, $name = null)
     {
-        if (false == $service instanceof Service\Wrapper\WrapperInterface) {
+        if (false == $service instanceof WrapperInterface) {
             if ($service instanceof \Closure) {
-                $service = new Service\Wrapper\ClosureWrapper($service);
+                $service = new ClosureWrapper($service);
             } elseif (is_object($service)) {
-                $service = new Service\Wrapper\ObjectWrapper($service);
+                $service = new ObjectWrapper($service);
             }
         }
 
-        if (false == $service instanceof Service\Wrapper\WrapperInterface) {
+        if (false == $service instanceof WrapperInterface) {
             throw new \InvalidArgumentException();
         }
 
@@ -49,11 +59,8 @@ class Server
      * @param \JsonRpcLib\Server\Input\Message  $input
      * @param \JsonRpcLib\Server\Output\Message $output
      */
-    public function dispatch(
-        \JsonRpcLib\Server\Input\Message $input,
-        \JsonRpcLib\Server\Output\Message $output)
+    public function dispatch(InputMessage $input, OutputMessage $output)
     {
-
         try {
             $requests = $input->getIterator();
 
@@ -66,7 +73,7 @@ class Server
 
                     $response = new Output\Response();
                     $response->id = $request->id;
-                    $response->error = new Output\Error($e->getMessage(), $e->getCode());
+                    $response->error = new Error($e->getMessage(), $e->getCode());
 
                     $output->addResponse($response);
                 }
@@ -75,7 +82,7 @@ class Server
         } catch (Exception $e) {
 
             $response = new Output\Response();
-            $response->error = new Output\Error($e->getMessage(), $e->getCode());
+            $response->error = new Error($e->getMessage(), $e->getCode());
 
             $output->addResponse($response);
         }
@@ -88,15 +95,13 @@ class Server
      * @param  \JsonRpcLib\Server\Output\Message|null $output
      * @return \JsonRpcLib\Server\Output\Data\Output
      */
-    public function handle(
-        \JsonRpcLib\Server\Input\Message $input = null,
-        \JsonRpcLib\Server\Output\Message $output = null)
+    public function handle(InputMessage $input = null, OutputMessage $output = null)
     {
         if (null == $input) {
-            $input = new Input\Message(new Input\Data\Input());
+            $input = new InputMessage(new DataInput());
         }
         if (null == $output) {
-            $output = new Output\Message(new Output\Data\Output());
+            $output = new OutputMessage(new DataOutput());
         }
 
         $this->dispatch($input, $output);
@@ -118,10 +123,7 @@ class Server
             $service = $this->getServiceManager()->getService($request->method);
 
             if (null == $service) {
-                throw new \JsonRpcLib\Server\Exception(
-                    \JsonRpcLib\Server\Output\Error::METHOD_NOT_FOUND(),
-                    \JsonRpcLib\Server\Output\Error::METHOD_NOT_FOUND
-                );
+                throw new Exception(Error::METHOD_NOT_FOUND(), Error::METHOD_NOT_FOUND);
             }
 
             $result = $this->getServiceManager()->execute(
@@ -134,11 +136,7 @@ class Server
             if ($e instanceof Exception) {
                 throw $e;
             }
-            throw new \JsonRpcLib\Server\Exception(
-                Output\Error::SERVER_ERROR(),
-                Output\Error::SERVER_ERROR,
-                $e
-            );
+            throw new Exception(Error::SERVER_ERROR(), Error::SERVER_ERROR, $e);
         }
 
         $response = new Output\Response();

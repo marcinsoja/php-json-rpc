@@ -2,6 +2,11 @@
 
 namespace JsonRpcLib\Server\Service\Manager;
 
+use \JsonRpcLib\Server\Service\Wrapper\WrapperInterface;
+use \JsonRpcLib\Server\Service\Wrapper\CallableInterface;
+use \JsonRpcLib\Server\Service\Resolver\Resolver;
+use \JsonRpcLib\Server\Service\Resolver\ResolverInterface;
+
 class Manager implements ManagerInterface
 {
     /**
@@ -18,7 +23,7 @@ class Manager implements ManagerInterface
     /**
      * @param \JsonRpcLib\Server\Service\Resolver\ResolverInterface $resolver
      */
-    public function __construct(\JsonRpcLib\Server\Service\Resolver\ResolverInterface $resolver = null)
+    public function __construct(ResolverInterface $resolver = null)
     {
         $this->resolver = $resolver;
     }
@@ -29,7 +34,7 @@ class Manager implements ManagerInterface
      * @param  string                                              $name
      * @return \JsonRpcLib\Server\Service\Manager\Manager
      */
-    public function addService(\JsonRpcLib\Server\Service\Wrapper\WrapperInterface $service, $name = null)
+    public function addService(WrapperInterface $service, $name = null)
     {
         if (null === $name) {
             $name = __CLASS__;
@@ -54,7 +59,7 @@ class Manager implements ManagerInterface
         if (array_key_exists($serviceName, $this->services)) {
             $service = $this->services[$serviceName];
 
-            if ($serviceName == $name && !$service instanceof \JsonRpcLib\Server\Service\Wrapper\CallableInterface) {
+            if ($serviceName == $name && !$service instanceof CallableInterface) {
                 $service = null;
             }
         } elseif (array_key_exists(__CLASS__, $this->services)) {
@@ -69,7 +74,7 @@ class Manager implements ManagerInterface
      * @param string                                              $method
      * @param array                                               $params
      */
-    public function execute(\JsonRpcLib\Server\Service\Wrapper\WrapperInterface $service, $name, array $params)
+    public function execute(WrapperInterface $service, $name, array $params)
     {
         $methodName = $this->getResolver()->getMethodName($name);
 
@@ -82,7 +87,7 @@ class Manager implements ManagerInterface
     public function getResolver()
     {
         if (null == $this->resolver) {
-            $this->resolver = new \JsonRpcLib\Server\Service\Resolver\Resolver();
+            $this->resolver = new Resolver();
         }
 
         return $this->resolver;

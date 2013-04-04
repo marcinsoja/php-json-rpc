@@ -2,6 +2,9 @@
 
 namespace JsonRpcLib\Server\Service\Wrapper;
 
+use \JsonRpcLib\Server\Output\Error;
+use \JsonRpcLib\Server\Exception;
+
 class ClosureWrapper implements WrapperInterface, CallableInterface
 {
     /**
@@ -32,9 +35,7 @@ class ClosureWrapper implements WrapperInterface, CallableInterface
         $helper = new Helper();
 
         if (false == $helper->isValidParameters($reflectionFunction, $params)) {
-            throw new \JsonRpcLib\Server\Exception(
-                \JsonRpcLib\Server\Output\Error::INVALID_PARAMS(),
-                \JsonRpcLib\Server\Output\Error::INVALID_PARAMS
+            throw new Exception(Error::INVALID_PARAMS(), Error::INVALID_PARAMS
             );
         }
 
@@ -44,10 +45,7 @@ class ClosureWrapper implements WrapperInterface, CallableInterface
         );
 
         if (false == $helper->isValidParameters($reflectionFunction, $parameters)) {
-            throw new \JsonRpcLib\Server\Exception(
-                \JsonRpcLib\Server\Output\Error::INVALID_PARAMS(),
-                \JsonRpcLib\Server\Output\Error::INVALID_PARAMS
-            );
+            throw new Exception(Error::INVALID_PARAMS(), Error::INVALID_PARAMS);
         }
 
         return call_user_func_array($this->closure, $parameters);
