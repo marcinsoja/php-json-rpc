@@ -1,6 +1,8 @@
 <?php
 
-class WrapperHelperTest extends PHPUnit_Framework_TestCase 
+namespace Unit\Server\Service\Wrapper;
+
+class HelperTest extends \PHPUnit_Framework_TestCase 
 {
     /**
      * @dataProvider provider

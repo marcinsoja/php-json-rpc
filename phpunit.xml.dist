@@ -1,10 +1,10 @@
 <phpunit bootstrap="tests/bootstrap.php" colors="true" >
     <testsuites>
-        <testsuite name="JsonRpcLib/JsonRpcLib server test suite">
-            <directory>tests/Server</directory>
+        <testsuite name="JsonRpcLib/JsonRpcLib unit test suite">
+            <directory>tests/Unit</directory>
         </testsuite>
-        <testsuite name="JsonRpcLib/JsonRpcLib client test suite">
-            <directory>tests/Client</directory>
+        <testsuite name="JsonRpcLib/JsonRpcLib integration test suite">
+            <directory>tests/Integration</directory>
         </testsuite>
     </testsuites>
     <filter>

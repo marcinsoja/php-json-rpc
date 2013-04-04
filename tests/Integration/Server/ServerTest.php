@@ -1,7 +1,10 @@
 <?php
+
+namespace Integration\Server;
+
 require_once 'MockService.php';
 
-class ServerTest extends PHPUnit_Framework_TestCase 
+class ServerTest extends \PHPUnit_Framework_TestCase 
 {
     /**
      *
@@ -20,7 +23,7 @@ class ServerTest extends PHPUnit_Framework_TestCase
             return $a + $b;
         };
         
-        $this->serviceObject = new MockService();
+        $this->serviceObject = new \MockService();
     }
     
     /**
@@ -28,15 +31,15 @@ class ServerTest extends PHPUnit_Framework_TestCase
      */
     public function testUse($value, $expected) {
 
-        $in = new JsonRpcLib\Server\Input\Data\Memory($value);
-        $out = new JsonRpcLib\Server\Output\Data\Memory();
+        $in = new \JsonRpcLib\Server\Input\Data\Memory($value);
+        $out = new \JsonRpcLib\Server\Output\Data\Memory();
         
-        $inputMessage = new JsonRpcLib\Server\Input\Message($in);
-        $outputMessage = new JsonRpcLib\Server\Output\Message($out);
+        $inputMessage = new \JsonRpcLib\Server\Input\Message($in);
+        $outputMessage = new \JsonRpcLib\Server\Output\Message($out);
         
-        $manager = new JsonRpcLib\Server\Service\Manager\Manager();
+        $manager = new \JsonRpcLib\Server\Service\Manager\Manager();
         
-        $server = new JsonRpcLib\Server\Server($manager);
+        $server = new \JsonRpcLib\Server\Server($manager);
         
         $server->addService(new \JsonRpcLib\Server\Service\Wrapper\ClosureWrapper($this->closureSum), 'sum');
         $server->addService($this->serviceObject, 'serviceObject');
@@ -89,15 +92,15 @@ class ServerTest extends PHPUnit_Framework_TestCase
      */
     public function testError($value, $expected) {
 
-        $in = new JsonRpcLib\Server\Input\Data\Memory($value);
-        $out = new JsonRpcLib\Server\Output\Data\Memory();
+        $in = new \JsonRpcLib\Server\Input\Data\Memory($value);
+        $out = new \JsonRpcLib\Server\Output\Data\Memory();
         
-        $inputMessage = new JsonRpcLib\Server\Input\Message($in);
-        $outputMessage = new JsonRpcLib\Server\Output\Message($out);
+        $inputMessage = new \JsonRpcLib\Server\Input\Message($in);
+        $outputMessage = new \JsonRpcLib\Server\Output\Message($out);
         
-        $manager = new JsonRpcLib\Server\Service\Manager\Manager();
+        $manager = new \JsonRpcLib\Server\Service\Manager\Manager();
         
-        $server = new JsonRpcLib\Server\Server($manager);
+        $server = new \JsonRpcLib\Server\Server($manager);
         
         $server->addService($this->closureSum);
         $server->addService($this->serviceObject);
