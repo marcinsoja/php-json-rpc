@@ -47,7 +47,7 @@ class Manager implements ManagerInterface
 
     /**
      *
-     * @param  type                                                     $name
+     * @param  string                                                   $name
      * @return \JsonRpcLib\Server\Service\Wrapper\WrapperInterface|null
      */
     public function getService($name)

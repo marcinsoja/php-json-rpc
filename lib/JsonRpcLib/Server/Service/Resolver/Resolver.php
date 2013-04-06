@@ -39,7 +39,7 @@ class Resolver implements ResolverInterface
      */
     private function getPart($name, $part, $separator = '.')
     {
-        $nameParts = explode($separator, $name, 2);
+        $nameParts = explode($separator, $name.'', 2);
 
         if (count($nameParts) == 2) {
             return $nameParts[$part];

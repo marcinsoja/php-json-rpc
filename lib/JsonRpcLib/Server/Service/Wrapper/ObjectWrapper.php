@@ -51,16 +51,27 @@ class ObjectWrapper implements WrapperInterface
 
         $helper = new Helper();
 
-        if (false == $helper->isValidParameters($reflectionMethod, $params)) {
+        $isValidNumberOfParameters = $helper->isValidNumberOfParameters(
+            $params,
+            $reflectionMethod->getNumberOfRequiredParameters(),
+            $reflectionMethod->getNumberOfParameters()
+        );
+
+        if (false == $isValidNumberOfParameters) {
             throw new Exception(Error::INVALID_PARAMS(), Error::INVALID_PARAMS);
         }
 
-        $parameters = $helper->normalizeParameters(
-            $helper->getParametersNames($reflectionMethod),
-            $params
+        $parametersNames = $helper->getParametersNames($reflectionMethod);
+
+        $parameters = $helper->normalizeParameters($parametersNames, $params);
+
+        $isValid = $helper->isValidParameters(
+            $parameters,
+            $parametersNames,
+            $reflectionMethod->getNumberOfRequiredParameters()
         );
 
-        if (false == $helper->isValidParameters($reflectionMethod, $parameters)) {
+        if (false == $isValid) {
             throw new Exception(Error::INVALID_PARAMS(), Error::INVALID_PARAMS);
         }
 

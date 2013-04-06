@@ -5,17 +5,44 @@ namespace JsonRpcLib\Server\Service\Wrapper;
 class Helper
 {
     /**
-     * @param  \ReflectionFunctionAbstract $reflectionFunction
-     * @param  array                       $parameters
+     * @param  array   $parameters
+     * @param  array   $parametersNames
+     * @param  int     $numberOfRequiredParameters
      * @return boolean
      */
-    public function isValidParameters(\ReflectionFunctionAbstract $reflectionFunction, array $parameters)
+    public function isValidParameters(
+        array $parameters,
+        array $parametersNames,
+        $numberOfRequiredParameters
+    )
     {
-        $hasRequiredParameters =
-            count($parameters) >= $reflectionFunction->getNumberOfRequiredParameters();
+        foreach ($parametersNames as $name) {
+            if ($numberOfRequiredParameters-- <= 0 || array_key_exists($name, $parameters)) {
+                continue;
+            }
 
-        $hasValidNumberParameters =
-            count($parameters) <= $reflectionFunction->getNumberOfParameters();
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * @param  array $parameters
+     * @param  int   $numberOfRequiredParameters
+     * @param  int   $numberOfParameters
+     * @return type
+     */
+    public function isValidNumberOfParameters(
+        array $parameters,
+        $numberOfRequiredParameters,
+        $numberOfParameters
+    )
+    {
+        $parametersCount = count($parameters);
+
+        $hasRequiredParameters      = $parametersCount >= $numberOfRequiredParameters;
+        $hasValidNumberParameters   = $parametersCount <= $numberOfParameters;
 
         return $hasRequiredParameters && $hasValidNumberParameters;
     }

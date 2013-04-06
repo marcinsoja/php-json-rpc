@@ -34,17 +34,30 @@ class ClosureWrapper implements WrapperInterface, CallableInterface
 
         $helper = new Helper();
 
-        if (false == $helper->isValidParameters($reflectionFunction, $params)) {
-            throw new Exception(Error::INVALID_PARAMS(), Error::INVALID_PARAMS
-            );
+        $isValidNumberOfParameters = $helper->isValidNumberOfParameters(
+            $params,
+            $reflectionFunction->getNumberOfRequiredParameters(),
+            $reflectionFunction->getNumberOfParameters()
+        );
+
+        if (false == $isValidNumberOfParameters) {
+            throw new Exception(Error::INVALID_PARAMS(), Error::INVALID_PARAMS);
         }
 
+        $parametersNames = $helper->getParametersNames($reflectionFunction);
+
         $parameters = $helper->normalizeParameters(
-            $helper->getParametersNames($reflectionFunction),
+            $parametersNames,
             $params
         );
 
-        if (false == $helper->isValidParameters($reflectionFunction, $parameters)) {
+         $isValid = $helper->isValidParameters(
+            $parameters,
+            $parametersNames,
+            $reflectionFunction->getNumberOfRequiredParameters()
+        );
+
+        if (false == $isValid) {
             throw new Exception(Error::INVALID_PARAMS(), Error::INVALID_PARAMS);
         }
 
