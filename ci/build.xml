@@ -28,6 +28,13 @@
             <arg path="${basedir}/../lib" />
             <arg value="--level=all" />
         </exec>
+        <exec executable="php">
+            <arg path="${basedir}/../php-cs-fixer.phar" />
+            <arg value="-v" />
+            <arg value="fix" />
+            <arg path="${basedir}/../tests" />
+            <arg value="--level=all" />
+        </exec>
     </target>
     
     <target name="clean" description="Cleanup build artifacts">
