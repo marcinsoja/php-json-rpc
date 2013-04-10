@@ -4,7 +4,7 @@
     "keywords": ["json-rpc", "rpc", "server", "client", "json"],
     "homepage": "https://github.com/marcinsoja/php-json-rpc",
     "license": "MIT",
-    "version": "0.9.0-beta1",
+    "version": "0.9.1",
     "authors": [
         {
             "name": "Marcin Soja",
