@@ -72,8 +72,8 @@ class Server
                 } catch (Exception $e) {
 
                     $response = new Output\Response();
-                    $response->id = $request->id;
-                    $response->error = new Error($e->getMessage(), $e->getCode());
+                    $response->setId($request->getId());
+                    $response->setError(new Error($e->getMessage(), $e->getCode()));
 
                     $output->addResponse($response);
                 }
@@ -82,7 +82,7 @@ class Server
         } catch (Exception $e) {
 
             $response = new Output\Response();
-            $response->error = new Error($e->getMessage(), $e->getCode());
+            $response->setError(new Error($e->getMessage(), $e->getCode()));
 
             $output->addResponse($response);
         }
@@ -120,7 +120,7 @@ class Server
 
         try {
 
-            $service = $this->getServiceManager()->getService($request->method);
+            $service = $this->getServiceManager()->getService($request->getMethod());
 
             if (null == $service) {
                 throw new Exception(Error::METHOD_NOT_FOUND(), Error::METHOD_NOT_FOUND);
@@ -128,7 +128,7 @@ class Server
 
             $result = $this->getServiceManager()->execute(
                 $service,
-                $request->method,
+                $request->getMethod(),
                 $request->getParams()
             );
 
@@ -142,8 +142,8 @@ class Server
         $response = new Output\Response();
 
         if (false == $request->isNotification()) {
-            $response->id = $request->id;
-            $response->result = $result;
+            $response->setId($request->getId());
+            $response->setResult($result);
         }
 
         return $response;
