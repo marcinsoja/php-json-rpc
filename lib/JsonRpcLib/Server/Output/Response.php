@@ -2,6 +2,8 @@
 
 namespace JsonRpcLib\Server\Output;
 
+use \JsonRpcLib\Rpc\Error;
+
 class Response extends \JsonRpcLib\Rpc\Response
 {
     /**

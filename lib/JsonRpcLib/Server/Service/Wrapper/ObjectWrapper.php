@@ -2,7 +2,7 @@
 
 namespace JsonRpcLib\Server\Service\Wrapper;
 
-use \JsonRpcLib\Server\Output\Error;
+use \JsonRpcLib\Rpc\Error;
 use \JsonRpcLib\Server\Exception;
 
 class ObjectWrapper implements WrapperInterface

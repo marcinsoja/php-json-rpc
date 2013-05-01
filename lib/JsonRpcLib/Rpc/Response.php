@@ -45,7 +45,7 @@ class Response
      */
     public function __construct(array $data = array())
     {
-        foreach (array('result', 'error', 'id') as $name) {
+        foreach (array('result', 'error', 'id', 'jsonrpc') as $name) {
             if (array_key_exists($name, $data)) {
                 $this->$name = $data[$name];
             }

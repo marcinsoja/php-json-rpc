@@ -9,7 +9,7 @@ use \JsonRpcLib\Server\Input\Message as InputMessage;
 use \JsonRpcLib\Server\Output\Message as OutputMessage;
 use \JsonRpcLib\Server\Input\Data\Input as DataInput;
 use \JsonRpcLib\Server\Output\Data\Output as DataOutput;
-use \JsonRpcLib\Server\Output\Error;
+use \JsonRpcLib\Rpc\Error;
 use \JsonRpcLib\Server\Exception;
 
 class Server

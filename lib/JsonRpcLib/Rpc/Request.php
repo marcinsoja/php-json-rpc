@@ -3,7 +3,7 @@
 namespace JsonRpcLib\Rpc;
 
 use \JsonRpcLib\Server\Exception;
-use \JsonRpcLib\Server\Output\Error;
+use \JsonRpcLib\Rpc\Error;
 
 class Request
 {
