@@ -73,7 +73,7 @@ class Server
 
                     $response = new Output\Response();
                     $response->setId($request->getId());
-                    $response->setError(new Error($e->getMessage(), $e->getCode()));
+                    $response->setError(new Error($e->getMessage(), $e->getCode(), $e->getData()));
 
                     $output->addResponse($response);
                 }
@@ -82,7 +82,7 @@ class Server
         } catch (Exception $e) {
 
             $response = new Output\Response();
-            $response->setError(new Error($e->getMessage(), $e->getCode()));
+            $response->setError(new Error($e->getMessage(), $e->getCode(), $e->getData()));
 
             $output->addResponse($response);
         }
@@ -136,7 +136,7 @@ class Server
             if ($e instanceof Exception) {
                 throw $e;
             }
-            throw new Exception(Error::SERVER_ERROR(), Error::SERVER_ERROR, $e);
+            throw new Exception(Error::SERVER_ERROR(), Error::SERVER_ERROR, $e, array($e->getMessage()));
         }
 
         $response = new Output\Response();
