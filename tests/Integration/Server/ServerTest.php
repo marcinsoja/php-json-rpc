@@ -139,7 +139,7 @@ class ServerTest extends \PHPUnit_Framework_TestCase
                   '{"jsonrpc":"2.0","error":{"code":-32601,"message":"Method not found"},"id":null}'),
 
             array('{"jsonrpc":"2.0","method":"error"}',
-                  '{"jsonrpc":"2.0","error":{"code":-32000,"message":"Server error"},"id":null}'),
+                  '{"jsonrpc":"2.0","error":{"code":-32000,"message":"Server error","data":["Error"]},"id":null}'),
 
             array('[{"jsonrpc":"2.0","method":"sum","params":[1,2,4],"id":"1"},{"jsonrpc":"2.0","method"]',
                   '{"jsonrpc":"2.0","error":{"code":-32700,"message":"Parse error"},"id":null}'),

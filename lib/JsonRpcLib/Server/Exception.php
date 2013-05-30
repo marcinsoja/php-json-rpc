@@ -4,9 +4,9 @@ namespace JsonRpcLib\Server;
 
 class Exception extends \JsonRpcLib\Exception
 {
-    private $data = array();
+    private $data = null;
     
-    public function __construct($message = null, $code = 0, $previous = null, $data = array()) {
+    public function __construct($message = null, $code = 0, $previous = null, $data = null) {
         
         if(is_array($previous)) {
             $data = $previous;
