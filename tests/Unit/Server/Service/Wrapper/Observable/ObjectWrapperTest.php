@@ -37,7 +37,7 @@ class ObjectWrapperTest extends \Unit\Server\Service\Wrapper\ObjectWrapperTest
     {
         $wrapper = new ObjectWrapper($object);
 
-        $wrapper->getEventManager()->attach('beforeExecute', new \JsonRpcLib\Server\Service\Wrapper\Plugin\Annotation());
+        $wrapper->getEventManager()->attach('beforeExecute', new \JsonRpcLib\Server\Service\Wrapper\Plugin\ExposeCheck());
 
         $result = $wrapper->execute($method, $params);
 
@@ -53,7 +53,7 @@ class ObjectWrapperTest extends \Unit\Server\Service\Wrapper\ObjectWrapperTest
 
         try {
             $wrapper->execute($method, $params);
-            $wrapper->getEventManager()->attach('beforeExecute', new \JsonRpcLib\Server\Service\Wrapper\Plugin\Annotation());
+            $wrapper->getEventManager()->attach('beforeExecute', new \JsonRpcLib\Server\Service\Wrapper\Plugin\ExposeCheck());
             $this->fail();
         } catch (\Exception $e) {
 

@@ -5,12 +5,12 @@ error_reporting(E_ALL);
 require_once '../vendor/autoload.php';
 
 use \JsonRpcLib\Server;
-use JsonRpcLib\Server\Service\Wrapper\Annotation\Service; 
+use JsonRpcLib\Server\Service\Wrapper\Annotation\Expose; 
 
 class User
 {
     /**
-     * @Service
+     * @Expose
      */
     public function getId()
     {
@@ -29,16 +29,25 @@ $service = new User();
 
 $wrapper = new Server\Service\Wrapper\Observable\ObjectWrapper($service);
 
-$wrapper->getEventManager()->attach('beforeExecute', new Server\Service\Wrapper\Plugin\Annotation());
-$wrapper->getEventManager()->attach('beforeExecute', function(\Zend\EventManager\EventInterface $e){
-    file_put_contents('rpc.log', "\n".$e->getName().' '.  json_encode($e->getParam('params')), FILE_APPEND);
+$afterCallback = function(Server\Service\Wrapper\ExecuteEvent $e){
+    file_put_contents('rpc.log', "\n".$e->getName().' '.  json_encode($e->getResult()), FILE_APPEND);
+};
+
+$wrapper->getEventManager()->attach('beforeExecute', new Server\Service\Wrapper\Plugin\ExposeCheck());
+
+$wrapper->getEventManager()->attach('afterExecute', $afterCallback, 1);
+
+$wrapper->getEventManager()->attach('afterExecute', new Server\Service\Wrapper\Plugin\ResultSignature($privateKey = 'abc'), 3);
+
+$wrapper->getEventManager()->attach('beforeExecute', function(Server\Service\Wrapper\ExecuteEvent $e){
+    file_put_contents('rpc.log', "\n".$e->getName().' '.  json_encode($e->getParams()), FILE_APPEND);
 });
-$wrapper->getEventManager()->attach('beforeExecute', function(\Zend\EventManager\EventInterface $e){
-    throw new Exception("Domain exception message");
+
+$wrapper->getEventManager()->attach('beforeExecute', function(Server\Service\Wrapper\ExecuteEvent $e){
+//    throw new Exception("Domain exception message");
 });
-$wrapper->getEventManager()->attach('afterExecute', function(\Zend\EventManager\EventInterface $e){
-    file_put_contents('rpc.log', "\n".$e->getName().' '.$e->getParam('result'), FILE_APPEND);
-});
+
+$wrapper->getEventManager()->attach('afterExecute', $afterCallback, 2);
 
 $server->addService($wrapper);
 

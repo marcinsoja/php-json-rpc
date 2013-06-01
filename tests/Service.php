@@ -1,6 +1,6 @@
 <?php
 
-use JsonRpcLib\Server\Service\Wrapper\Annotation\Service as RPC;
+use JsonRpcLib\Server\Service\Wrapper\Annotation\Expose as RPC;
 
 class Service
 {

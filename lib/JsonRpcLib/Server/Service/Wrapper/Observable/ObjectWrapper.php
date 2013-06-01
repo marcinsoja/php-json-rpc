@@ -2,7 +2,13 @@
 
 namespace JsonRpcLib\Server\Service\Wrapper\Observable;
 
-class ObjectWrapper extends \JsonRpcLib\Server\Service\Wrapper\ObjectWrapper implements \Zend\EventManager\EventManagerAwareInterface
+use \JsonRpcLib\Server\Service\Wrapper\ExecuteEvent;
+use \JsonRpcLib\Server\Service\Wrapper;
+use \Zend\EventManager\EventManagerAwareInterface;
+use \Zend\EventManager\EventManagerInterface;
+use \Zend\EventManager\EventManager;
+
+class ObjectWrapper extends Wrapper\ObjectWrapper implements EventManagerAwareInterface
 {
     /**
      *
@@ -13,13 +19,13 @@ class ObjectWrapper extends \JsonRpcLib\Server\Service\Wrapper\ObjectWrapper imp
     public function getEventManager()
     {
         if (!$this->eventManager) {
-            $this->setEventManager(new \Zend\EventManager\EventManager());
+            $this->setEventManager(new EventManager());
         }
 
         return $this->eventManager;
     }
 
-    public function setEventManager(\Zend\EventManager\EventManagerInterface $eventManager)
+    public function setEventManager(EventManagerInterface $eventManager)
     {
         $eventManager->setIdentifiers(array(
             __CLASS__,
@@ -31,23 +37,23 @@ class ObjectWrapper extends \JsonRpcLib\Server\Service\Wrapper\ObjectWrapper imp
 
     public function beforeExecute(\ReflectionMethod $reflectionMethod, array $params)
     {
-        $this->getEventManager()->trigger(
-            __FUNCTION__,
-            $this,
-            array('method'=>$reflectionMethod, 'params'=>$params)
-        );
+        $event = new ExecuteEvent();
+        $event->setReflectionMethod($reflectionMethod);
+        $event->setParams($params);
 
-        return $params;
+        $this->getEventManager()->trigger(__FUNCTION__, $this, $event);
+
+        return $event->getParams();
     }
 
     public function afterExecute(\ReflectionMethod $reflectionMethod, $result)
     {
-        $this->getEventManager()->trigger(
-            __FUNCTION__,
-            $this,
-            array('method'=>$reflectionMethod, 'result'=>$result)
-        );
+        $event = new ExecuteEvent();
+        $event->setReflectionMethod($reflectionMethod);
+        $event->setResult($result);
 
-        return $result;
+        $this->getEventManager()->trigger(__FUNCTION__, $this, $event);
+
+        return $event->getResult();
     }
 }
