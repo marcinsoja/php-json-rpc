@@ -1,7 +1,27 @@
 <?php
 
-namespace JsonRpcLib\Server\Output;
+namespace JsonRpcLib\Rpc;
 
+/**
+ * @see https://github.com/zendframework/zf2/issues/2456#issuecomment-15134060
+ *
+ * The correct interpretation is:
+ *
+ * -32768 to -32000 / pre-defined errors (#): These error-codes and their
+ *  meanings are defined by the JSON-RPC 2.0 specification.
+ *
+ * -32099 to -32000 / implementation-defined server-errors (*): These error-codes
+ *  can be used for JSON-RPC 2.0 servers/frameworks/libraries for
+ *  their own errors (e.g. if the JSON-RPC-server itself fails).
+ *
+ * All other codes (>-32000 or <-32768) / application defined errors: These can
+ * freely be used by procedures which are called via JSON-RPC.
+ *
+ *  -32768                -32099   -32000             0
+ * ____|_____________________|________|_______________|_
+ *     |#####################|########|               |
+ *     |                     |********|               |
+ */
 class Error
 {
     /**
@@ -40,7 +60,7 @@ class Error
     /**
      * @var array
      */
-    private static $messages = array(
+    protected static $messages = array(
         self::PARSE_ERROR       => 'Parse error',
         self::INVALID_REQUEST   => 'Invalid Request',
         self::METHOD_NOT_FOUND  => 'Method not found',
@@ -102,10 +122,7 @@ class Error
             return $this;
         }
 
-        $code = (int) $code;
-        if (array_key_exists($code, self::$messages)) {
-            $this->code = $code;
-        }
+        $this->code = (int) $code;
 
         return $this;
     }
@@ -212,8 +229,12 @@ class Error
 
     public static function __callStatic($value, $args)
     {
-        $code = constant(sprintf('%s::%s', get_class(), $value));
+        $code = constant(sprintf('%s::%s', get_called_class(), $value));
 
-        return self::$messages[$code];
+        if (array_key_exists($code, self::$messages)) {
+            return self::$messages[$code];
+        }
+
+        return $value;
     }
 }

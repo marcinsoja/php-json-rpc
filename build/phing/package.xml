@@ -8,12 +8,7 @@
 		 <delete dir="${path.package}" />
 		 <mkdir dir="${path.results}/lib" />
 		 <mkdir dir="${path.package}" />
-		 <exec
-            os="Linux"
-            outputProperty="version.number"
-            command="git rev-parse HEAD"
-            dir="${project.basedir}"
-            />
+		 
 		<phingcall target="copyFilesToResultsLib" />
         <phingcall target="packageFiles" />
 		<phingcall target="packagePhar" />
@@ -35,17 +30,12 @@
 		<mkdir dir="${path.results}/lib" />
 
         <copy todir="${path.results}/lib">
-            <filterchain>
-                <replacetokens begintoken="@@" endtoken="@@">
-                    <token key="version" value="${version.number}" />
-                </replacetokens>
-            </filterchain>
             <fileset dir="${path.lib}">
                 <include name="**/**" />
             </fileset>
         </copy>
 	</target>
-
+    
 	<target name="packageFiles">
 		<zip destfile="${path.package}/JsonRpcLib.zip">
             <fileset dir="${path.results}/lib">

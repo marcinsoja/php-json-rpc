@@ -3,7 +3,7 @@
 namespace JsonRpcLib\Server\Input;
 
 use \JsonRpcLib\Server\Exception;
-use \JsonRpcLib\Server\Output\Error;
+use \JsonRpcLib\Rpc\Error;
 
 class Message implements \IteratorAggregate, \Countable
 {

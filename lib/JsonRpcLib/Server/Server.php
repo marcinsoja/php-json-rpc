@@ -9,7 +9,7 @@ use \JsonRpcLib\Server\Input\Message as InputMessage;
 use \JsonRpcLib\Server\Output\Message as OutputMessage;
 use \JsonRpcLib\Server\Input\Data\Input as DataInput;
 use \JsonRpcLib\Server\Output\Data\Output as DataOutput;
-use \JsonRpcLib\Server\Output\Error;
+use \JsonRpcLib\Rpc\Error;
 use \JsonRpcLib\Server\Exception;
 
 class Server
@@ -72,8 +72,8 @@ class Server
                 } catch (Exception $e) {
 
                     $response = new Output\Response();
-                    $response->id = $request->id;
-                    $response->error = new Error($e->getMessage(), $e->getCode());
+                    $response->setId($request->getId());
+                    $response->setError(new Error($e->getMessage(), $e->getCode(), $e->getData()));
 
                     $output->addResponse($response);
                 }
@@ -82,7 +82,7 @@ class Server
         } catch (Exception $e) {
 
             $response = new Output\Response();
-            $response->error = new Error($e->getMessage(), $e->getCode());
+            $response->setError(new Error($e->getMessage(), $e->getCode(), $e->getData()));
 
             $output->addResponse($response);
         }
@@ -120,7 +120,7 @@ class Server
 
         try {
 
-            $service = $this->getServiceManager()->getService($request->method);
+            $service = $this->getServiceManager()->getService($request->getMethod());
 
             if (null == $service) {
                 throw new Exception(Error::METHOD_NOT_FOUND(), Error::METHOD_NOT_FOUND);
@@ -128,7 +128,7 @@ class Server
 
             $result = $this->getServiceManager()->execute(
                 $service,
-                $request->method,
+                $request->getMethod(),
                 $request->getParams()
             );
 
@@ -136,14 +136,14 @@ class Server
             if ($e instanceof Exception) {
                 throw $e;
             }
-            throw new Exception(Error::SERVER_ERROR(), Error::SERVER_ERROR, $e);
+            throw new Exception(Error::SERVER_ERROR(), Error::SERVER_ERROR, $e, array($e->getMessage()));
         }
 
         $response = new Output\Response();
 
         if (false == $request->isNotification()) {
-            $response->id = $request->id;
-            $response->result = $result;
+            $response->setId($request->getId());
+            $response->setResult($result);
         }
 
         return $response;

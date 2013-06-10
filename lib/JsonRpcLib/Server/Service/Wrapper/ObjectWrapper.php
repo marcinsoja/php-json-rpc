@@ -2,7 +2,7 @@
 
 namespace JsonRpcLib\Server\Service\Wrapper;
 
-use \JsonRpcLib\Server\Output\Error;
+use \JsonRpcLib\Rpc\Error;
 use \JsonRpcLib\Server\Exception;
 
 class ObjectWrapper implements WrapperInterface
@@ -34,12 +34,32 @@ class ObjectWrapper implements WrapperInterface
      */
     public function execute($name, array $params)
     {
-        if (false == method_exists($this->object, $name)) {
-            throw new Exception(Error::METHOD_NOT_FOUND(), Error::METHOD_NOT_FOUND);
-        }
+        $this->checkHasMethod($name);
 
         $reflectionMethod = new \ReflectionMethod(get_class($this->object), $name);
 
+        $this->checkIsAllowedMethod($reflectionMethod);
+
+        $params = $this->beforeExecute($reflectionMethod, $params);
+
+        $parameters = $this->normalizeParameters($reflectionMethod, $params);
+
+        $resultExecute = call_user_func_array(array($this->object, $name), $parameters);
+
+        $result = $this->afterExecute($reflectionMethod, $resultExecute);
+
+        return $result;
+    }
+
+    private function checkHasMethod($name)
+    {
+        if (false == method_exists($this->object, $name)) {
+            throw new Exception(Error::METHOD_NOT_FOUND(), Error::METHOD_NOT_FOUND);
+        }
+    }
+
+    private function checkIsAllowedMethod(\ReflectionMethod $reflectionMethod)
+    {
         $isAllowed = $reflectionMethod->isPublic()
             && false == $reflectionMethod->isStatic()
             && $reflectionMethod->isUserDefined()
@@ -48,7 +68,10 @@ class ObjectWrapper implements WrapperInterface
         if (false == $isAllowed) {
             throw new Exception(Error::METHOD_NOT_FOUND(), Error::METHOD_NOT_FOUND);
         }
+    }
 
+    private function normalizeParameters(\ReflectionMethod $reflectionMethod, array $params)
+    {
         $helper = new Helper();
 
         $isValidNumberOfParameters = $helper->isValidNumberOfParameters(
@@ -75,6 +98,16 @@ class ObjectWrapper implements WrapperInterface
             throw new Exception(Error::INVALID_PARAMS(), Error::INVALID_PARAMS);
         }
 
-        return call_user_func_array(array($this->object, $name), $parameters);
+        return $parameters;
+    }
+
+    public function beforeExecute(\ReflectionMethod $reflectionMethod, array $params)
+    {
+        return $params;
+    }
+
+    public function afterExecute(\ReflectionMethod $reflectionMethod, $result)
+    {
+        return $result;
     }
 }
