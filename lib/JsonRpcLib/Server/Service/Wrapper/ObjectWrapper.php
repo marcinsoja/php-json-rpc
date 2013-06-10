@@ -44,9 +44,9 @@ class ObjectWrapper implements WrapperInterface
 
         $parameters = $this->normalizeParameters($reflectionMethod, $params);
 
-        $result = call_user_func_array(array($this->object, $name), $parameters);
+        $resultExecute = call_user_func_array(array($this->object, $name), $parameters);
 
-        $result = $this->afterExecute($reflectionMethod, $result);
+        $result = $this->afterExecute($reflectionMethod, $resultExecute);
 
         return $result;
     }
