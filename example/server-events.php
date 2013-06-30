@@ -3,51 +3,62 @@ ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
 require_once '../vendor/autoload.php';
+require_once './UserService.php';
 
-use \JsonRpcLib\Server;
-use JsonRpcLib\Server\Service\Wrapper\Annotation\Expose; 
-
-class User
-{
-    /**
-     * @Expose
-     */
-    public function getId()
-    {
-        return 5;
-    }
-    
-    public function getName()
-    {
-        return 'Kevin';
-    }
-}
+use JsonRpcLib\Server;
+use JsonRpcLib\Server\Service\Wrapper\Observable\ObjectWrapper;
+use JsonRpcLib\Server\Service\Wrapper\ExecuteEvent;
+use JsonRpcLib\Server\Service\Wrapper\Plugin\ResultSignature;
+use JsonRpcLib\Server\Service\Wrapper\Plugin\ExposeCheck;
 
 $server = new Server\Server();
 
-$service = new User();
+$service = new \Example\UserService();
 
-$wrapper = new Server\Service\Wrapper\Observable\ObjectWrapper($service);
+$wrapper = new ObjectWrapper($service);
 
-$afterCallback = function(Server\Service\Wrapper\ExecuteEvent $e){
-    file_put_contents('rpc.log', "\n".$e->getName().' '.  json_encode($e->getResult()), FILE_APPEND);
+$afterCallback = function(ExecuteEvent $e){
+    $message = "\n".$e->getName().' '.  json_encode($e->getResult());
+    file_put_contents('rpc.log', $message, FILE_APPEND);
 };
 
-$wrapper->getEventManager()->attach('beforeExecute', new Server\Service\Wrapper\Plugin\ExposeCheck());
+$wrapper->getEventManager()->attach(
+    'beforeExecute',
+    new ExposeCheck()
+);
 
-$wrapper->getEventManager()->attach('afterExecute', $afterCallback, 1);
+$wrapper->getEventManager()->attach(
+    'afterExecute',
+    $afterCallback,
+    1
+);
 
-$wrapper->getEventManager()->attach('afterExecute', new Server\Service\Wrapper\Plugin\ResultSignature($privateKey = 'abc'), 3);
+$wrapper->getEventManager()->attach(
+    'afterExecute',
+    new ResultSignature($privateKey = 'abc'),
+    3
+);
 
-$wrapper->getEventManager()->attach('beforeExecute', function(Server\Service\Wrapper\ExecuteEvent $e){
-    file_put_contents('rpc.log', "\n".$e->getName().' '.  json_encode($e->getParams()), FILE_APPEND);
-});
+$wrapper->getEventManager()->attach(
+    'beforeExecute',
+    function(ExecuteEvent $e){
+        $message = "\n".$e->getName().' '.  json_encode($e->getParams());
+        file_put_contents('rpc.log', $message, FILE_APPEND);
+    }
+);
 
-$wrapper->getEventManager()->attach('beforeExecute', function(Server\Service\Wrapper\ExecuteEvent $e){
-//    throw new Exception("Domain exception message");
-});
+$wrapper->getEventManager()->attach(
+    'beforeExecute',
+    function(ExecuteEvent $e){
+//        throw new Exception("Domain exception message");
+    }
+);
 
-$wrapper->getEventManager()->attach('afterExecute', $afterCallback, 2);
+$wrapper->getEventManager()->attach(
+    'afterExecute',
+    $afterCallback,
+    2
+);
 
 $server->addService($wrapper);
 
