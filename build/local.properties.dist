@@ -1,0 +1,3 @@
+amazon.key=KEY
+amazon.secret=SECRET
+amazon.bucket=php-json-rpc

@@ -2,24 +2,12 @@
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
-require_once '../vendor/autoload.php';
+require_once '../../vendor/autoload.php';
+require_once './UserService.php';
 
-use \JsonRpcLib\Server;
+use JsonRpcLib\Server;
 
-class User
-{
-    public function getId()
-    {
-        return 5;
-    }
-    public function setData($name, $address)
-    {
-        return true;
-    }
-}
-
-// object service
-$serviceOffer = new User();
+$service = new \Example\UserService();
 
 // closure service
 $serviceTime = function() {
@@ -39,14 +27,13 @@ $server->addService($serviceTime, 'getTime');
 // bind object as 'User' service
 // in: {"jsonrpc":"2.0","method":"User.getId","id":2}
 // out: {"jsonrpc":"2.0","result":5,"id":2}
-// 
+//
 // in: {"jsonrpc":"2.0","method":"User.setData","params":{"address":"701 Main Street","name":"Marcin Soja"},"id":3}
 // out: {"jsonrpc":"2.0","result":true,"id":3}
 // OR
 // in: {"jsonrpc":"2.0","method":"User.setData","params":["Marcin Soja", "701 Main Street"],"id":4}
 // out: {"jsonrpc":"2.0","result":true,"id":4}
-
-$server->addService($serviceOffer, 'User');
+$server->addService($service, 'User');
 
 // testing with GET data param
 // server.php?data={"jsonrpc":"2.0","method":"getTime","id":1}
