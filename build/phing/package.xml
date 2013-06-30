@@ -18,11 +18,15 @@
                 <phingcall target="upload" />
             </then> 
         </if>
-		
+        <phingcall target="copyPharToExampleDir" />
     </target>
 
 	<target name="upload">
         <s3put source="${path.package}/JsonRpcLib.phar" object="JsonRpcLib.phar" />
+	</target>
+    
+	<target name="copyPharToExampleDir">
+        <copy file="${path.package}/JsonRpcLib.phar" tofile="${path.example}/server/JsonRpcLib.phar" />
 	</target>
     
 	<target name="copyFilesToResultsLib">
