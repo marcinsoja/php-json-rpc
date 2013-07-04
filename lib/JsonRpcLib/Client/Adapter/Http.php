@@ -30,10 +30,10 @@ class Http implements AdapterInterface
 
         $context = stream_context_create(array('http' => $options));
 
-        $response = file_get_contents($this->endPoint, false, $context);
+        $response = file_get_contents($this->endPointUrl, false, $context);
 
         if (false === $response) {
-            throw new \Exception('Connection to "'.$this->endPoint.'" failed');
+            throw new \Exception('Connection to "'.$this->endPointUrl.'" failed');
         }
 
         return $response;
